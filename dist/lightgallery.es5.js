@@ -77,7 +77,6 @@ var lightGalleryCoreSettings = {
     mode: 'lg-slide',
     easing: 'ease',
     speed: 400,
-    licenseKey: '0000-0000-000-0000',
     height: '100%',
     width: '100%',
     addClass: '',
@@ -891,7 +890,6 @@ var LightGallery = /** @class */ (function () {
         this.normalizeSettings();
         // Gallery items
         this.init();
-        this.validateLicense();
         return this;
     }
     LightGallery.prototype.generateSettings = function (options) {
@@ -991,14 +989,6 @@ var LightGallery = /** @class */ (function () {
         this.settings.plugins.forEach(function (plugin) {
             _this.plugins.push(new plugin(_this, $LG));
         });
-    };
-    LightGallery.prototype.validateLicense = function () {
-        if (!this.settings.licenseKey) {
-            console.error('Please provide a valid license key');
-        }
-        else if (this.settings.licenseKey === '0000-0000-000-0000') {
-            console.warn("lightGallery: " + this.settings.licenseKey + " license key is not valid for production use");
-        }
     };
     LightGallery.prototype.getSlideItem = function (index) {
         return $LG(this.getSlideItemId(index));
