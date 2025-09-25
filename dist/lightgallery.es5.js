@@ -1,5 +1,5 @@
 /*!
- * lightgallery | 2.8.4 | September 18th 2025
+ * lightgallery | 2.8.4 | September 25th 2025
  * http://www.lightgalleryjs.com/
  * Copyright (c) 2020 Sachin Neravath;
  * @license GPLv3
@@ -990,6 +990,42 @@ var LightGallery = /** @class */ (function () {
             _this.plugins.push(new plugin(_this, $LG));
         });
     };
+    /**
+     * Append user-defined toolbar icons.
+     * Accepts settings.customToolbar: Array<{ id: string; html: string; ariaLabel?: string; onClick?: (instance: LightGallery, ev: Event) => void; }>.
+     */
+    LightGallery.prototype.appendCustomIcons = function () {
+        var _this = this;
+        var settingsAny = this.settings;
+        var custom = Array.isArray(settingsAny === null || settingsAny === void 0 ? void 0 : settingsAny.customToolbar)
+            ? settingsAny.customToolbar
+            : [];
+        if (!custom.length)
+            return;
+        custom.forEach(function (btn) {
+            if (!btn || !btn.id || !btn.html)
+                return;
+            var id = _this.getIdName(btn.id);
+            var aria = btn.ariaLabel ? "aria-label=\"" + btn.ariaLabel + "\"" : '';
+            // Append button HTML to the toolbar
+            _this.$toolbar.append("<button type=\"button\" id=\"" + id + "\" " + aria + " class=\"lg-icon lg-custom-icon lg-custom-icon-" + btn.id + "\">" + btn.html + "</button>");
+            // Bind click handler
+            _this.getElementById(btn.id).on('click.lg', function (ev) {
+                var _a;
+                try {
+                    (_a = btn.onClick) === null || _a === void 0 ? void 0 : _a.call(btn, _this, ev);
+                }
+                catch (e) {
+                    // no-op
+                }
+                _this.LGel.trigger('lgCustomIconClick', {
+                    id: btn.id,
+                    instance: _this,
+                    event: ev,
+                });
+            });
+        });
+    };
     LightGallery.prototype.getSlideItem = function (index) {
         return $LG(this.getSlideItemId(index));
     };
@@ -1072,6 +1108,8 @@ var LightGallery = /** @class */ (function () {
         if (this.settings.download) {
             this.$toolbar.append("<a id=\"" + this.getIdName('lg-download') + "\" target=\"_blank\" rel=\"noopener\" aria-label=\"" + this.settings.strings['download'] + "\" download class=\"lg-download lg-icon\"></a>");
         }
+        // Append any custom toolbar icons provided via settings
+        this.appendCustomIcons();
         this.counter();
         $LG(window).on("resize.lg.global" + this.lgId + " orientationchange.lg.global" + this.lgId, function () {
             _this.refreshOnResize();

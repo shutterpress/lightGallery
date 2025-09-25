@@ -239,6 +239,46 @@ export class LightGallery {
         });
     }
 
+    /**
+     * Append user-defined toolbar icons.
+     * Accepts settings.customToolbar: Array<{ id: string; html: string; ariaLabel?: string; onClick?: (instance: LightGallery, ev: Event) => void; }>.
+     */
+    private appendCustomIcons(): void {
+        const settingsAny = this.settings as any;
+        const custom: Array<{
+            id: string;
+            html: string;
+            ariaLabel?: string;
+            onClick?: (instance: LightGallery, ev: Event) => void;
+        }> = Array.isArray(settingsAny?.customToolbar)
+            ? settingsAny.customToolbar
+            : [];
+        if (!custom.length) return;
+
+        custom.forEach((btn) => {
+            if (!btn || !btn.id || !btn.html) return;
+            const id = this.getIdName(btn.id);
+            const aria = btn.ariaLabel ? `aria-label="${btn.ariaLabel}"` : '';
+            // Append button HTML to the toolbar
+            this.$toolbar.append(
+                `<button type="button" id="${id}" ${aria} class="lg-icon lg-custom-icon lg-custom-icon-${btn.id}">${btn.html}</button>`,
+            );
+            // Bind click handler
+            this.getElementById(btn.id).on('click.lg', (ev: Event) => {
+                try {
+                    btn.onClick?.(this, ev);
+                } catch (e) {
+                    // no-op
+                }
+                this.LGel.trigger('lgCustomIconClick', {
+                    id: btn.id,
+                    instance: this,
+                    event: ev,
+                });
+            });
+        });
+    }
+
     getSlideItem(index: number): lgQuery {
         return $LG(this.getSlideItemId(index));
     }
@@ -404,6 +444,9 @@ export class LightGallery {
                 }" download class="lg-download lg-icon"></a>`,
             );
         }
+
+        // Append any custom toolbar icons provided via settings
+        this.appendCustomIcons();
 
         this.counter();
 
