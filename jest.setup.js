@@ -1,32 +1,18 @@
-// Ensure a non-opaque origin very early
-try {
-    // In jsdom, window.location is configurable, but read-only in browsers
-    const desired = new URL('http://localhost/');
-    const current =
-        typeof window !== 'undefined' && window.location
-            ? window.location
-            : null;
-    if (!current || current.origin === 'null' || current.origin === '') {
+// Force a non-opaque origin before anything else touches window.location/localStorage
+(function ensureOrigin() {
+    try {
+        const href = 'http://localhost/';
+        // In jsdom, we can safely set location by replacing the property on the Window instance
         Object.defineProperty(window, 'location', {
-            value: desired,
+            value: new URL(href),
             configurable: true,
         });
-    }
-} catch (_) {}
+    } catch (_) {}
+})();
 
-// Provide a safe localStorage even if jsdom exposes a throwing getter under opaque origins
-(function ensureLocalStorage() {
+// Always provide a non-throwing localStorage shim
+(function installLocalStorageShim() {
     if (typeof window === 'undefined') return;
-    let needsPatch = false;
-    try {
-        const probeKey = '__lg_probe__';
-        window.localStorage.setItem(probeKey, '1');
-        window.localStorage.removeItem(probeKey);
-    } catch (e) {
-        needsPatch = true;
-    }
-    if (!needsPatch) return;
-
     let store = {};
     const api = {
         getItem: (k) =>
@@ -47,8 +33,14 @@ try {
             return Object.keys(store).length;
         },
     };
-    Object.defineProperty(window, 'localStorage', {
-        value: api,
-        configurable: true,
-    });
+    try {
+        Object.defineProperty(window, 'localStorage', {
+            value: api,
+            configurable: true,
+        });
+    } catch (_) {
+        // Fallback, just assign if defineProperty fails for any reason
+        // @ts-ignore
+        window.localStorage = api;
+    }
 })();

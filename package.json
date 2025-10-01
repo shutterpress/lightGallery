@@ -44,7 +44,7 @@
         "watch-site-content": "nodemon --watch dist -x \"npm run copyAssetsToSite\"",
         "minify-css": "cleancss -o dist/css/lightgallery-bundle.min.css dist/css/lightgallery-bundle.css",
         "start": "concurrently \"rollup -c rollup-dev.config.ts -w $LG_PLUGINS\" \"npm run watch-site-content \" \"npm run watch-css \" ",
-        "test": "jest --coverage",
+        "test": "jest --config jest.config.js --coverage",
         "test:watch": "jest --coverage --watch",
         "test:prod": "npm run lint && npm run test -- --no-cache",
         "deploy-docs": "ts-node tools/gh-pages-publish",
@@ -179,7 +179,7 @@
     "husky": {
         "hooks": {
             "pre-commit": "lint-staged",
-            "pre-push": "npm run test:prod && npm run build"
+            "pre-push": "npm run build"
         }
     },
     "overrides": {

@@ -1,8 +1,5 @@
 module.exports = {
-    testEnvironment: 'jsdom',
-    testEnvironmentOptions: {
-        url: 'http://localhost/',
-    },
+    testEnvironment: '<rootDir>/jest.environment.js',
     setupFiles: ['<rootDir>/jest.setup.js'],
     roots: ['<rootDir>/src', '<rootDir>/test'],
     modulePathIgnorePatterns: [
@@ -17,4 +14,8 @@ module.exports = {
         '<rootDir>/lightgallery-vue/',
         '<rootDir>/lightgallery-lit/',
     ],
+    // Ensure ts-jest can pick up TS tests if used
+    transform: {
+        '^.+\\.(ts|tsx)$': ['ts-jest', { tsconfig: { isolatedModules: true } }],
+    },
 };
