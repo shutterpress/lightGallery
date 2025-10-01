@@ -98,6 +98,50 @@
             "src/*.{js,ts}"
         ]
     },
+    "eslintConfig": {
+        "root": true,
+        "parser": "@typescript-eslint/parser",
+        "plugins": [
+            "@typescript-eslint"
+        ],
+        "extends": [
+            "eslint:recommended",
+            "plugin:@typescript-eslint/recommended",
+            "prettier"
+        ],
+        "ignorePatterns": [
+            "dist/**",
+            "site/**",
+            "**/*.min.js"
+        ],
+        "overrides": [
+            {
+                "files": [
+                    "test/**/*.ts"
+                ],
+                "rules": {
+                    "@typescript-eslint/no-explicit-any": "off",
+                    "@typescript-eslint/no-unused-vars": [
+                        "warn",
+                        {
+                            "argsIgnorePattern": "^_",
+                            "varsIgnorePattern": "^_"
+                        }
+                    ]
+                }
+            }
+        ],
+        "rules": {
+            "@typescript-eslint/no-explicit-any": "off",
+            "@typescript-eslint/no-unused-vars": [
+                "warn",
+                {
+                    "argsIgnorePattern": "^_",
+                    "varsIgnorePattern": "^_"
+                }
+            ]
+        }
+    },
     "commitlint": {
         "extends": [
             "@commitlint/config-conventional"
