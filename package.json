@@ -18,17 +18,16 @@
     ],
     "repository": {
         "type": "git",
-        "url": "https://github.com/sachinchoolur/lightGallery"
+        "url": "https://github.com/shutterpress/lightGallery.git"
     },
-    "homepage": "http://www.lightgalleryjs.com/",
+    "homepage": "https://shutterpress.io/",
     "bugs": {
-        "url": "https://github.com/sachinchoolur/lightGallery/issues"
+        "url": "https://github.com/shutterpress/lightGallery/issues"
     },
     "license": "GPLv3",
     "author": {
-        "name": "Sachin Neravath",
-        "email": "sachi77n@gmail.com",
-        "url": "https://github.com/sachinchoolur"
+        "name": "ShutterPress",
+        "url": "https://shutterpress.io"
     },
     "engines": {
         "node": ">=6.0.0"
