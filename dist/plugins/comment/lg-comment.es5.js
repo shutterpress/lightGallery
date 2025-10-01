@@ -1,11 +1,11 @@
 /*!
- * lightgallery | 2.8.4 | September 25th 2025
+ * lightgallery | 2.8.4 | October 1st 2025
  * http://www.lightgalleryjs.com/
  * Copyright (c) 2020 Sachin Neravath;
  * @license GPLv3
  */
 
-/*! *****************************************************************************
+/******************************************************************************
 Copyright (c) Microsoft Corporation.
 
 Permission to use, copy, modify, and/or distribute this software for any
@@ -29,6 +29,11 @@ var __assign = function() {
         return t;
     };
     return __assign.apply(this, arguments);
+};
+
+typeof SuppressedError === "function" ? SuppressedError : function (error, suppressed, message) {
+    var e = new Error(message);
+    return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
 };
 
 /**
@@ -114,7 +119,7 @@ var CommentBox = /** @class */ (function () {
     CommentBox.prototype.setMarkup = function () {
         this.core.outer.append(this.settings.commentsMarkup +
             '<div class="lg-comment-overlay"></div>');
-        var commentToggleBtn = "<button type=\"button\" aria-label=\"" + this.settings.commentPluginStrings['toggleComments'] + "\" class=\"lg-comment-toggle lg-icon\"></button>";
+        var commentToggleBtn = "<button type=\"button\" aria-label=\"".concat(this.settings.commentPluginStrings['toggleComments'], "\" class=\"lg-comment-toggle lg-icon\"></button>");
         this.core.$toolbar.append(commentToggleBtn);
     };
     CommentBox.prototype.toggleCommentBox = function () {
@@ -142,11 +147,11 @@ var CommentBox = /** @class */ (function () {
         var _this_1 = this;
         // eslint-disable-next-line @typescript-eslint/no-this-alias
         var _this = this;
-        this.core.LGel.on(lGEvents.beforeSlide + ".comment", function (event) {
+        this.core.LGel.on("".concat(lGEvents.beforeSlide, ".comment"), function (event) {
             var html = _this_1.core.galleryItems[event.detail.index].fbHtml;
             _this_1.core.outer.find('.lg-comment-body').html(html);
         });
-        this.core.LGel.on(lGEvents.afterSlide + ".comment", function () {
+        this.core.LGel.on("".concat(lGEvents.afterSlide, ".comment"), function () {
             try {
                 FB.XFBML.parse();
             }
@@ -164,10 +169,10 @@ var CommentBox = /** @class */ (function () {
         this.core.outer
             .find('.lg-comment-body')
             .append('<div id="disqus_thread"></div>');
-        this.core.LGel.on(lGEvents.beforeSlide + ".comment", function () {
+        this.core.LGel.on("".concat(lGEvents.beforeSlide, ".comment"), function () {
             $disqusThread.html('');
         });
-        this.core.LGel.on(lGEvents.afterSlide + ".comment", function (event) {
+        this.core.LGel.on("".concat(lGEvents.afterSlide, ".comment"), function (event) {
             var index = event.detail.index;
             // eslint-disable-next-line @typescript-eslint/no-this-alias
             var _this = _this_1;
@@ -201,5 +206,5 @@ var CommentBox = /** @class */ (function () {
     return CommentBox;
 }());
 
-export default CommentBox;
+export { CommentBox as default };
 //# sourceMappingURL=lg-comment.es5.js.map

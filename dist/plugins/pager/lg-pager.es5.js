@@ -1,11 +1,11 @@
 /*!
- * lightgallery | 2.8.4 | September 25th 2025
+ * lightgallery | 2.8.4 | October 1st 2025
  * http://www.lightgalleryjs.com/
  * Copyright (c) 2020 Sachin Neravath;
  * @license GPLv3
  */
 
-/*! *****************************************************************************
+/******************************************************************************
 Copyright (c) Microsoft Corporation.
 
 Permission to use, copy, modify, and/or distribute this software for any
@@ -29,6 +29,11 @@ var __assign = function() {
         return t;
     };
     return __assign.apply(this, arguments);
+};
+
+typeof SuppressedError === "function" ? SuppressedError : function (error, suppressed, message) {
+    var e = new Error(message);
+    return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
 };
 
 /**
@@ -81,7 +86,7 @@ var Pager = /** @class */ (function () {
     Pager.prototype.getPagerHtml = function (items) {
         var pagerList = '';
         for (var i = 0; i < items.length; i++) {
-            pagerList += "<span  data-lg-item-id=\"" + i + "\" class=\"lg-pager-cont\"> \n                    <span data-lg-item-id=\"" + i + "\" class=\"lg-pager\"></span>\n                    <div class=\"lg-pager-thumb-cont\"><span class=\"lg-caret\"></span> <img src=\"" + items[i].thumb + "\" /></div>\n                    </span>";
+            pagerList += "<span  data-lg-item-id=\"".concat(i, "\" class=\"lg-pager-cont\"> \n                    <span data-lg-item-id=\"").concat(i, "\" class=\"lg-pager\"></span>\n                    <div class=\"lg-pager-thumb-cont\"><span class=\"lg-caret\"></span> <img src=\"").concat(items[i].thumb, "\" /></div>\n                    </span>");
         }
         return pagerList;
     };
@@ -112,11 +117,11 @@ var Pager = /** @class */ (function () {
                 $pagerOuter.removeClass('lg-pager-hover');
             });
         });
-        this.core.LGel.on(lGEvents.beforeSlide + ".pager", function (event) {
+        this.core.LGel.on("".concat(lGEvents.beforeSlide, ".pager"), function (event) {
             var index = event.detail.index;
             _this.manageActiveClass.call(_this, index);
         });
-        this.core.LGel.on(lGEvents.updateSlides + ".pager", function () {
+        this.core.LGel.on("".concat(lGEvents.updateSlides, ".pager"), function () {
             $pagerOuter.empty();
             $pagerOuter.html(_this.getPagerHtml(_this.core.galleryItems));
             _this.manageActiveClass(_this.core.index);
@@ -135,5 +140,5 @@ var Pager = /** @class */ (function () {
     return Pager;
 }());
 
-export default Pager;
+export { Pager as default };
 //# sourceMappingURL=lg-pager.es5.js.map

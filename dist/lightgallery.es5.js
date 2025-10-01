@@ -1,11 +1,11 @@
 /*!
- * lightgallery | 2.8.4 | September 25th 2025
+ * lightgallery | 2.8.4 | October 1st 2025
  * http://www.lightgalleryjs.com/
  * Copyright (c) 2020 Sachin Neravath;
  * @license GPLv3
  */
 
-/*! *****************************************************************************
+/******************************************************************************
 Copyright (c) Microsoft Corporation.
 
 Permission to use, copy, modify, and/or distribute this software for any
@@ -31,13 +31,37 @@ var __assign = function() {
     return __assign.apply(this, arguments);
 };
 
-function __spreadArrays() {
-    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-    for (var r = Array(s), k = 0, i = 0; i < il; i++)
-        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-            r[k] = a[j];
-    return r;
+function __read(o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
 }
+
+function __spreadArray(to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+}
+
+typeof SuppressedError === "function" ? SuppressedError : function (error, suppressed, message) {
+    var e = new Error(message);
+    return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
+};
 
 /**
  * List of lightGallery events
@@ -583,7 +607,7 @@ var utils = {
             .then(function (response) { return response.text(); })
             .then(function (htmlContent) {
             if (insertMethod === 'append') {
-                var contentDiv = "<div class=\"lg-sub-html\">" + htmlContent + "</div>";
+                var contentDiv = "<div class=\"lg-sub-html\">".concat(htmlContent, "</div>");
                 element.append(contentDiv);
             }
             else {
@@ -675,12 +699,12 @@ var utils = {
     },
     getIframeMarkup: function (iframeWidth, iframeHeight, iframeMaxWidth, iframeMaxHeight, src, iframeTitle) {
         var title = iframeTitle ? 'title="' + iframeTitle + '"' : '';
-        return "<div class=\"lg-media-cont lg-has-iframe\" style=\"width:" + iframeWidth + "; max-width:" + iframeMaxWidth + "; height: " + iframeHeight + "; max-height:" + iframeMaxHeight + "\">\n                    <iframe class=\"lg-object\" frameborder=\"0\" " + title + " src=\"" + src + "\"  allowfullscreen=\"true\"></iframe>\n                </div>";
+        return "<div class=\"lg-media-cont lg-has-iframe\" style=\"width:".concat(iframeWidth, "; max-width:").concat(iframeMaxWidth, "; height: ").concat(iframeHeight, "; max-height:").concat(iframeMaxHeight, "\">\n                    <iframe class=\"lg-object\" frameborder=\"0\" ").concat(title, " src=\"").concat(src, "\"  allowfullscreen=\"true\"></iframe>\n                </div>");
     },
     getImgMarkup: function (index, src, altAttr, srcset, sizes, sources) {
-        var srcsetAttr = srcset ? "srcset=\"" + srcset + "\"" : '';
-        var sizesAttr = sizes ? "sizes=\"" + sizes + "\"" : '';
-        var imgMarkup = "<img " + altAttr + " " + srcsetAttr + "  " + sizesAttr + " class=\"lg-object lg-image\" data-index=\"" + index + "\" src=\"" + src + "\" />";
+        var srcsetAttr = srcset ? "srcset=\"".concat(srcset, "\"") : '';
+        var sizesAttr = sizes ? "sizes=\"".concat(sizes, "\"") : '';
+        var imgMarkup = "<img ".concat(altAttr, " ").concat(srcsetAttr, "  ").concat(sizesAttr, " class=\"lg-object lg-image\" data-index=\"").concat(index, "\" src=\"").concat(src, "\" />");
         var sourceTag = '';
         if (sources) {
             var sourceObj = typeof sources === 'string' ? JSON.parse(sources) : sources;
@@ -688,12 +712,12 @@ var utils = {
                 var attrs = '';
                 Object.keys(source).forEach(function (key) {
                     // Do not remove the first space as it is required to separate the attributes
-                    attrs += " " + key + "=\"" + source[key] + "\"";
+                    attrs += " ".concat(key, "=\"").concat(source[key], "\"");
                 });
-                return "<source " + attrs + "></source>";
+                return "<source ".concat(attrs, "></source>");
             });
         }
-        return "" + sourceTag + imgMarkup;
+        return "".concat(sourceTag).concat(imgMarkup);
     },
     // Get src from responsive src
     getResponsiveSrc: function (srcItms) {
@@ -751,7 +775,7 @@ var utils = {
         if (typeof dummyImg !== 'string') {
             _dummy = dummyImg.outerHTML;
         }
-        return "<div class=\"lg-video-cont " + videoClass + "\" style=\"" + videoContStyle + "\">\n                <div class=\"lg-video-play-button\">\n                <svg\n                    viewBox=\"0 0 20 20\"\n                    preserveAspectRatio=\"xMidYMid\"\n                    focusable=\"false\"\n                    aria-labelledby=\"" + playVideoString + "\"\n                    role=\"img\"\n                    class=\"lg-video-play-icon\"\n                >\n                    <title>" + playVideoString + "</title>\n                    <polygon class=\"lg-video-play-icon-inner\" points=\"1,0 20,10 1,20\"></polygon>\n                </svg>\n                <svg class=\"lg-video-play-icon-bg\" viewBox=\"0 0 50 50\" focusable=\"false\">\n                    <circle cx=\"50%\" cy=\"50%\" r=\"20\"></circle></svg>\n                <svg class=\"lg-video-play-icon-circle\" viewBox=\"0 0 50 50\" focusable=\"false\">\n                    <circle cx=\"50%\" cy=\"50%\" r=\"20\"></circle>\n                </svg>\n            </div>\n            " + _dummy + "\n            <img class=\"lg-object lg-video-poster\" src=\"" + _poster + "\" />\n        </div>";
+        return "<div class=\"lg-video-cont ".concat(videoClass, "\" style=\"").concat(videoContStyle, "\">\n                <div class=\"lg-video-play-button\">\n                <svg\n                    viewBox=\"0 0 20 20\"\n                    preserveAspectRatio=\"xMidYMid\"\n                    focusable=\"false\"\n                    aria-labelledby=\"").concat(playVideoString, "\"\n                    role=\"img\"\n                    class=\"lg-video-play-icon\"\n                >\n                    <title>").concat(playVideoString, "</title>\n                    <polygon class=\"lg-video-play-icon-inner\" points=\"1,0 20,10 1,20\"></polygon>\n                </svg>\n                <svg class=\"lg-video-play-icon-bg\" viewBox=\"0 0 50 50\" focusable=\"false\">\n                    <circle cx=\"50%\" cy=\"50%\" r=\"20\"></circle></svg>\n                <svg class=\"lg-video-play-icon-circle\" viewBox=\"0 0 50 50\" focusable=\"false\">\n                    <circle cx=\"50%\" cy=\"50%\" r=\"20\"></circle>\n                </svg>\n            </div>\n            ").concat(_dummy, "\n            <img class=\"lg-object lg-video-poster\" src=\"").concat(_poster, "\" />\n        </div>");
     },
     getFocusableElements: function (container) {
         var elements = container.querySelectorAll('a[href]:not([disabled]), button:not([disabled]), textarea:not([disabled]), input[type="text"]:not([disabled]), input[type="radio"]:not([disabled]), input[type="checkbox"]:not([disabled]), select:not([disabled])');
@@ -770,7 +794,7 @@ var utils = {
      */
     getDynamicOptions: function (items, extraProps, getCaptionFromTitleOrAlt, exThumbImage) {
         var dynamicElements = [];
-        var availableDynamicOptions = __spreadArrays(defaultDynamicOptions, extraProps);
+        var availableDynamicOptions = __spreadArray(__spreadArray([], __read(defaultDynamicOptions), false), __read(extraProps), false);
         [].forEach.call(items, function (item) {
             var dynamicEl = {};
             for (var i = 0; i < item.attributes.length; i++) {
@@ -966,7 +990,7 @@ var LightGallery = /** @class */ (function () {
             var uuid = lgQuery.generateUUID();
             $element
                 .attr('data-lg-id', uuid)
-                .on("click.lgcustom-item-" + uuid, function (e) {
+                .on("click.lgcustom-item-".concat(uuid), function (e) {
                 e.preventDefault();
                 var currentItemIndex = _this.settings.index || index;
                 _this.openGallery(currentItemIndex, element);
@@ -1006,9 +1030,9 @@ var LightGallery = /** @class */ (function () {
             if (!btn || !btn.id || !btn.html)
                 return;
             var id = _this.getIdName(btn.id);
-            var aria = btn.ariaLabel ? "aria-label=\"" + btn.ariaLabel + "\"" : '';
+            var aria = btn.ariaLabel ? "aria-label=\"".concat(btn.ariaLabel, "\"") : '';
             // Append button HTML to the toolbar
-            _this.$toolbar.append("<button type=\"button\" id=\"" + id + "\" " + aria + " class=\"lg-icon lg-custom-icon lg-custom-icon-" + btn.id + "\">" + btn.html + "</button>");
+            _this.$toolbar.append("<button type=\"button\" id=\"".concat(id, "\" ").concat(aria, " class=\"lg-icon lg-custom-icon lg-custom-icon-").concat(btn.id, "\">").concat(btn.html, "</button>"));
             // Bind click handler
             _this.getElementById(btn.id).on('click.lg', function (ev) {
                 var _a;
@@ -1026,17 +1050,56 @@ var LightGallery = /** @class */ (function () {
             });
         });
     };
+    /**
+     * Replace toolbar icon contents using a CSS selector.
+     * Accepts settings.replaceIcons: Array<{ selector: string; html: string }>
+     * - selector: any valid CSS selector, matched within this toolbar only
+     * - html: SVG or HTML string to inject into each matched element
+     */
+    LightGallery.prototype.replaceToolbarIcons = function () {
+        var settingsAny = this.settings;
+        var list = Array.isArray(settingsAny === null || settingsAny === void 0 ? void 0 : settingsAny.replaceIcons)
+            ? settingsAny.replaceIcons
+            : [];
+        if (!list.length)
+            return;
+        var root = this.$toolbar && this.$toolbar.get ? this.$toolbar.get() : null;
+        if (!root)
+            return;
+        list.forEach(function (item) {
+            if (!item || !item.selector || !item.html)
+                return;
+            try {
+                var nodes = root.querySelectorAll(item.selector);
+                nodes.forEach(function (el) {
+                    try {
+                        var frag = document
+                            .createRange()
+                            .createContextualFragment(item.html);
+                        el.innerHTML = '';
+                        el.appendChild(frag);
+                    }
+                    catch (_a) {
+                        el.innerHTML = item.html;
+                    }
+                });
+            }
+            catch (e) {
+                // invalid selector, ignore
+            }
+        });
+    };
     LightGallery.prototype.getSlideItem = function (index) {
         return $LG(this.getSlideItemId(index));
     };
     LightGallery.prototype.getSlideItemId = function (index) {
-        return "#lg-item-" + this.lgId + "-" + index;
+        return "#lg-item-".concat(this.lgId, "-").concat(index);
     };
     LightGallery.prototype.getIdName = function (id) {
-        return id + "-" + this.lgId;
+        return "".concat(id, "-").concat(this.lgId);
     };
     LightGallery.prototype.getElementById = function (id) {
-        return $LG("#" + this.getIdName(id));
+        return $LG("#".concat(this.getIdName(id)));
     };
     LightGallery.prototype.manageSingleSlideClassName = function () {
         if (this.galleryItems.length < 2) {
@@ -1056,7 +1119,7 @@ var LightGallery = /** @class */ (function () {
         var subHtmlCont = '';
         // Create controls
         if (this.settings.controls) {
-            controls = "<button type=\"button\" id=\"" + this.getIdName('lg-prev') + "\" aria-label=\"" + this.settings.strings['previousSlide'] + "\" class=\"lg-prev lg-icon\"> " + this.settings.prevHtml + " </button>\n                <button type=\"button\" id=\"" + this.getIdName('lg-next') + "\" aria-label=\"" + this.settings.strings['nextSlide'] + "\" class=\"lg-next lg-icon\"> " + this.settings.nextHtml + " </button>";
+            controls = "<button type=\"button\" id=\"".concat(this.getIdName('lg-prev'), "\" aria-label=\"").concat(this.settings.strings['previousSlide'], "\" class=\"lg-prev lg-icon\"> ").concat(this.settings.prevHtml, " </button>\n                <button type=\"button\" id=\"").concat(this.getIdName('lg-next'), "\" aria-label=\"").concat(this.settings.strings['nextSlide'], "\" class=\"lg-next lg-icon\"> ").concat(this.settings.nextHtml, " </button>");
         }
         if (this.settings.appendSubHtmlTo !== '.lg-item') {
             subHtmlCont =
@@ -1073,18 +1136,18 @@ var LightGallery = /** @class */ (function () {
         var ariaDescribedby = this.settings.ariaDescribedby
             ? 'aria-describedby="' + this.settings.ariaDescribedby + '"'
             : '';
-        var containerClassName = "lg-container " + this.settings.addClass + " " + (document.body !== this.settings.container ? 'lg-inline' : '');
+        var containerClassName = "lg-container ".concat(this.settings.addClass, " ").concat(document.body !== this.settings.container ? 'lg-inline' : '');
         var closeIcon = this.settings.closable && this.settings.showCloseIcon
-            ? "<button type=\"button\" aria-label=\"" + this.settings.strings['closeGallery'] + "\" id=\"" + this.getIdName('lg-close') + "\" class=\"lg-close lg-icon\"></button>"
+            ? "<button type=\"button\" aria-label=\"".concat(this.settings.strings['closeGallery'], "\" id=\"").concat(this.getIdName('lg-close'), "\" class=\"lg-close lg-icon\"></button>")
             : '';
         var maximizeIcon = this.settings.showMaximizeIcon
-            ? "<button type=\"button\" aria-label=\"" + this.settings.strings['toggleMaximize'] + "\" id=\"" + this.getIdName('lg-maximize') + "\" class=\"lg-maximize lg-icon\"></button>"
+            ? "<button type=\"button\" aria-label=\"".concat(this.settings.strings['toggleMaximize'], "\" id=\"").concat(this.getIdName('lg-maximize'), "\" class=\"lg-maximize lg-icon\"></button>")
             : '';
-        var template = "\n        <div class=\"" + containerClassName + "\" id=\"" + this.getIdName('lg-container') + "\" tabindex=\"-1\" aria-modal=\"true\" " + ariaLabelledby + " " + ariaDescribedby + " role=\"dialog\"\n        >\n            <div id=\"" + this.getIdName('lg-backdrop') + "\" class=\"lg-backdrop\"></div>\n\n            <div id=\"" + this.getIdName('lg-outer') + "\" class=\"lg-outer lg-use-css3 lg-css3 lg-hide-items " + addClasses + " \">\n\n              <div id=\"" + this.getIdName('lg-content') + "\" class=\"lg-content\">\n                <div id=\"" + this.getIdName('lg-inner') + "\" class=\"lg-inner\">\n                </div>\n                " + controls + "\n              </div>\n                <div id=\"" + this.getIdName('lg-toolbar') + "\" class=\"lg-toolbar lg-group\">\n                    " + maximizeIcon + "\n                    " + closeIcon + "\n                    </div>\n                    " + (this.settings.appendSubHtmlTo === '.lg-outer'
+        var template = "\n        <div class=\"".concat(containerClassName, "\" id=\"").concat(this.getIdName('lg-container'), "\" tabindex=\"-1\" aria-modal=\"true\" ").concat(ariaLabelledby, " ").concat(ariaDescribedby, " role=\"dialog\"\n        >\n            <div id=\"").concat(this.getIdName('lg-backdrop'), "\" class=\"lg-backdrop\"></div>\n\n            <div id=\"").concat(this.getIdName('lg-outer'), "\" class=\"lg-outer lg-use-css3 lg-css3 lg-hide-items ").concat(addClasses, " \">\n\n              <div id=\"").concat(this.getIdName('lg-content'), "\" class=\"lg-content\">\n                <div id=\"").concat(this.getIdName('lg-inner'), "\" class=\"lg-inner\">\n                </div>\n                ").concat(controls, "\n              </div>\n                <div id=\"").concat(this.getIdName('lg-toolbar'), "\" class=\"lg-toolbar lg-group\">\n                    ").concat(maximizeIcon, "\n                    ").concat(closeIcon, "\n                    </div>\n                    ").concat(this.settings.appendSubHtmlTo === '.lg-outer'
             ? subHtmlCont
-            : '') + "\n                <div id=\"" + this.getIdName('lg-components') + "\" class=\"lg-components\">\n                    " + (this.settings.appendSubHtmlTo === '.lg-sub-html'
+            : '', "\n                <div id=\"").concat(this.getIdName('lg-components'), "\" class=\"lg-components\">\n                    ").concat(this.settings.appendSubHtmlTo === '.lg-sub-html'
             ? subHtmlCont
-            : '') + "\n                </div>\n            </div>\n        </div>\n        ";
+            : '', "\n                </div>\n            </div>\n        </div>\n        ");
         $LG(this.settings.container).append(template);
         if (document.body !== this.settings.container) {
             $LG(this.settings.container).css('position', 'relative');
@@ -1097,7 +1160,7 @@ var LightGallery = /** @class */ (function () {
         this.$content = this.getElementById('lg-content');
         this.$toolbar = this.getElementById('lg-toolbar');
         this.$backdrop.css('transition-duration', this.settings.backdropDuration + 'ms');
-        var outerClassNames = this.settings.mode + " ";
+        var outerClassNames = "".concat(this.settings.mode, " ");
         this.manageSingleSlideClassName();
         if (this.settings.enableDrag) {
             outerClassNames += 'lg-grab ';
@@ -1106,18 +1169,22 @@ var LightGallery = /** @class */ (function () {
         this.$inner.css('transition-timing-function', this.settings.easing);
         this.$inner.css('transition-duration', this.settings.speed + 'ms');
         if (this.settings.download) {
-            this.$toolbar.append("<a id=\"" + this.getIdName('lg-download') + "\" target=\"_blank\" rel=\"noopener\" aria-label=\"" + this.settings.strings['download'] + "\" download class=\"lg-download lg-icon\"></a>");
+            this.$toolbar.append("<a id=\"".concat(this.getIdName('lg-download'), "\" target=\"_blank\" rel=\"noopener\" aria-label=\"").concat(this.settings.strings['download'], "\" download class=\"lg-download lg-icon\"></a>"));
         }
         // Append any custom toolbar icons provided via settings
         this.appendCustomIcons();
         this.counter();
-        $LG(window).on("resize.lg.global" + this.lgId + " orientationchange.lg.global" + this.lgId, function () {
+        $LG(window).on("resize.lg.global".concat(this.lgId, " orientationchange.lg.global").concat(this.lgId), function () {
             _this.refreshOnResize();
         });
         this.hideBars();
         this.manageCloseGallery();
         this.toggleMaximize();
         this.initModules();
+        // Re run replacements after plugins may have added toolbar buttons,
+        // and again after the gallery opens to catch late added controls
+        this.replaceToolbarIcons();
+        this.LGel.on(lGEvents.afterOpen, function () { return _this.replaceToolbarIcons(); });
     };
     LightGallery.prototype.refreshOnResize = function () {
         if (this.lgOpened) {
@@ -1315,7 +1382,7 @@ var LightGallery = /** @class */ (function () {
         this.currentItemsInDom = itemsToBeInsertedToDom;
         var items = '';
         itemsToBeInsertedToDom.forEach(function (item) {
-            items = items + ("<div id=\"" + item + "\" class=\"lg-item\"></div>");
+            items = items + "<div id=\"".concat(item, "\" class=\"lg-item\"></div>");
         });
         this.$inner.append(items);
         this.addHtml(index);
@@ -1454,7 +1521,7 @@ var LightGallery = /** @class */ (function () {
      */
     LightGallery.prototype.counter = function () {
         if (this.settings.counter) {
-            var counterHtml = "<div class=\"lg-counter\" role=\"status\" aria-live=\"polite\">\n                <span id=\"" + this.getIdName('lg-counter-current') + "\" class=\"lg-counter-current\">" + (this.index + 1) + " </span> /\n                <span id=\"" + this.getIdName('lg-counter-all') + "\" class=\"lg-counter-all\">" + this.galleryItems.length + " </span></div>";
+            var counterHtml = "<div class=\"lg-counter\" role=\"status\" aria-live=\"polite\">\n                <span id=\"".concat(this.getIdName('lg-counter-current'), "\" class=\"lg-counter-current\">").concat(this.index + 1, " </span> /\n                <span id=\"").concat(this.getIdName('lg-counter-all'), "\" class=\"lg-counter-all\">").concat(this.galleryItems.length, " </span></div>");
             this.outer.find(this.settings.appendCounterTo).append(counterHtml);
         }
     };
@@ -1508,7 +1575,7 @@ var LightGallery = /** @class */ (function () {
                 utils.fetchCaptionFromUrl(subHtmlUrl, currentSlide, 'append');
             }
             else {
-                currentSlide.append("<div class=\"lg-sub-html\">" + subHtml + "</div>");
+                currentSlide.append("<div class=\"lg-sub-html\">".concat(subHtml, "</div>"));
             }
         }
         // Add lg-empty-html class if title doesn't exist
@@ -1550,12 +1617,12 @@ var LightGallery = /** @class */ (function () {
     LightGallery.prototype.getDummyImgStyles = function (imageSize) {
         if (!imageSize)
             return '';
-        return "width:" + imageSize.width + "px;\n                margin-left: -" + imageSize.width / 2 + "px;\n                margin-top: -" + imageSize.height / 2 + "px;\n                height:" + imageSize.height + "px";
+        return "width:".concat(imageSize.width, "px;\n                margin-left: -").concat(imageSize.width / 2, "px;\n                margin-top: -").concat(imageSize.height / 2, "px;\n                height:").concat(imageSize.height, "px");
     };
     LightGallery.prototype.getVideoContStyle = function (imageSize) {
         if (!imageSize)
             return '';
-        return "width:" + imageSize.width + "px;\n                height:" + imageSize.height + "px";
+        return "width:".concat(imageSize.width, "px;\n                height:").concat(imageSize.height, "px");
     };
     LightGallery.prototype.getDummyImageContent = function ($currentSlide, index, alt) {
         var $currentItem;
@@ -1669,7 +1736,7 @@ var LightGallery = /** @class */ (function () {
                 _this.settings.loadYouTubePoster &&
                 !element.poster &&
                 element.__slideVideoInfo.youtube) {
-                element.poster = "//img.youtube.com/vi/" + element.__slideVideoInfo.youtube[1] + "/maxresdefault.jpg";
+                element.poster = "//img.youtube.com/vi/".concat(element.__slideVideoInfo.youtube[1], "/maxresdefault.jpg");
             }
         });
     };
@@ -1727,7 +1794,7 @@ var LightGallery = /** @class */ (function () {
                 $currentSlide.prepend(markup);
             }
             else if (videoInfo) {
-                var markup = "<div class=\"lg-video-cont \" style=\"" + lgVideoStyle + "\"></div>";
+                var markup = "<div class=\"lg-video-cont \" style=\"".concat(lgVideoStyle, "\"></div>");
                 $currentSlide.prepend(markup);
             }
             else {
@@ -1847,42 +1914,42 @@ var LightGallery = /** @class */ (function () {
         // Minimum 2 items should be there
         var possibleNumberOfItems = Math.max(numberOfItems, 3);
         possibleNumberOfItems = Math.min(possibleNumberOfItems, this.galleryItems.length);
-        var prevIndexItem = "lg-item-" + this.lgId + "-" + prevIndex;
+        var prevIndexItem = "lg-item-".concat(this.lgId, "-").concat(prevIndex);
         if (this.galleryItems.length <= 3) {
             this.galleryItems.forEach(function (_element, index) {
-                itemsToBeInsertedToDom.push("lg-item-" + _this.lgId + "-" + index);
+                itemsToBeInsertedToDom.push("lg-item-".concat(_this.lgId, "-").concat(index));
             });
             return itemsToBeInsertedToDom;
         }
         if (index < (this.galleryItems.length - 1) / 2) {
             for (var idx = index; idx > index - possibleNumberOfItems / 2 && idx >= 0; idx--) {
-                itemsToBeInsertedToDom.push("lg-item-" + this.lgId + "-" + idx);
+                itemsToBeInsertedToDom.push("lg-item-".concat(this.lgId, "-").concat(idx));
             }
             var numberOfExistingItems = itemsToBeInsertedToDom.length;
             for (var idx = 0; idx < possibleNumberOfItems - numberOfExistingItems; idx++) {
-                itemsToBeInsertedToDom.push("lg-item-" + this.lgId + "-" + (index + idx + 1));
+                itemsToBeInsertedToDom.push("lg-item-".concat(this.lgId, "-").concat(index + idx + 1));
             }
         }
         else {
             for (var idx = index; idx <= this.galleryItems.length - 1 &&
                 idx < index + possibleNumberOfItems / 2; idx++) {
-                itemsToBeInsertedToDom.push("lg-item-" + this.lgId + "-" + idx);
+                itemsToBeInsertedToDom.push("lg-item-".concat(this.lgId, "-").concat(idx));
             }
             var numberOfExistingItems = itemsToBeInsertedToDom.length;
             for (var idx = 0; idx < possibleNumberOfItems - numberOfExistingItems; idx++) {
-                itemsToBeInsertedToDom.push("lg-item-" + this.lgId + "-" + (index - idx - 1));
+                itemsToBeInsertedToDom.push("lg-item-".concat(this.lgId, "-").concat(index - idx - 1));
             }
         }
         if (this.settings.loop) {
             if (index === this.galleryItems.length - 1) {
-                itemsToBeInsertedToDom.push("lg-item-" + this.lgId + "-" + 0);
+                itemsToBeInsertedToDom.push("lg-item-".concat(this.lgId, "-").concat(0));
             }
             else if (index === 0) {
-                itemsToBeInsertedToDom.push("lg-item-" + this.lgId + "-" + (this.galleryItems.length - 1));
+                itemsToBeInsertedToDom.push("lg-item-".concat(this.lgId, "-").concat(this.galleryItems.length - 1));
             }
         }
         if (itemsToBeInsertedToDom.indexOf(prevIndexItem) === -1) {
-            itemsToBeInsertedToDom.push("lg-item-" + this.lgId + "-" + prevIndex);
+            itemsToBeInsertedToDom.push("lg-item-".concat(this.lgId, "-").concat(prevIndex));
         }
         return itemsToBeInsertedToDom;
     };
@@ -1891,12 +1958,12 @@ var LightGallery = /** @class */ (function () {
         var itemsToBeInsertedToDom = this.getItemsToBeInsertedToDom(index, prevIndex, this.settings.numberOfSlideItemsInDom);
         itemsToBeInsertedToDom.forEach(function (item) {
             if (_this.currentItemsInDom.indexOf(item) === -1) {
-                _this.$inner.append("<div id=\"" + item + "\" class=\"lg-item\"></div>");
+                _this.$inner.append("<div id=\"".concat(item, "\" class=\"lg-item\"></div>"));
             }
         });
         this.currentItemsInDom.forEach(function (item) {
             if (itemsToBeInsertedToDom.indexOf(item) === -1) {
-                $LG("#" + item).remove();
+                $LG("#".concat(item)).remove();
             }
         });
         return itemsToBeInsertedToDom;
@@ -2296,7 +2363,7 @@ var LightGallery = /** @class */ (function () {
                     }
                 }
             });
-            $LG(window).on("mousemove.lg.global" + this.lgId, function (e) {
+            $LG(window).on("mousemove.lg.global".concat(this.lgId), function (e) {
                 if (isDraging && _this.lgOpened) {
                     isMoved = true;
                     endCoords = {
@@ -2307,7 +2374,7 @@ var LightGallery = /** @class */ (function () {
                     _this.LGel.trigger(lGEvents.dragMove);
                 }
             });
-            $LG(window).on("mouseup.lg.global" + this.lgId, function (event) {
+            $LG(window).on("mouseup.lg.global".concat(this.lgId), function (event) {
                 if (!_this.lgOpened) {
                     return;
                 }
@@ -2439,7 +2506,7 @@ var LightGallery = /** @class */ (function () {
     };
     LightGallery.prototype.keyPress = function () {
         var _this = this;
-        $LG(window).on("keydown.lg.global" + this.lgId, function (e) {
+        $LG(window).on("keydown.lg.global".concat(this.lgId), function (e) {
             if (_this.lgOpened &&
                 _this.settings.escKey === true &&
                 e.keyCode === 27) {
@@ -2556,7 +2623,7 @@ var LightGallery = /** @class */ (function () {
         for (var index = 0; index < this.items.length; index++) {
             var element = this.items[index];
             var $element = $LG(element);
-            $element.off("click.lgcustom-item-" + $element.attr('data-lg-id'));
+            $element.off("click.lgcustom-item-".concat($element.attr('data-lg-id')));
         }
     };
     LightGallery.prototype.trapFocus = function () {
@@ -2564,7 +2631,7 @@ var LightGallery = /** @class */ (function () {
         this.$container.get().focus({
             preventScroll: true,
         });
-        $LG(window).on("keydown.lg.global" + this.lgId, function (e) {
+        $LG(window).on("keydown.lg.global".concat(this.lgId), function (e) {
             if (!_this.lgOpened) {
                 return;
             }
@@ -2692,7 +2759,7 @@ var LightGallery = /** @class */ (function () {
             _this.$backdrop
                 .removeAttr('style')
                 .css('transition-duration', _this.settings.backdropDuration + 'ms');
-            _this.outer.removeClass("lg-closing " + _this.settings.startClass);
+            _this.outer.removeClass("lg-closing ".concat(_this.settings.startClass));
             _this.getSlideItem(_this.index).removeClass('lg-start-end-progress');
             _this.$inner.empty();
             if (_this.lgOpened) {
@@ -2770,7 +2837,7 @@ var LightGallery = /** @class */ (function () {
         if (!this.settings.dynamic) {
             this.invalidateItems();
         }
-        $LG(window).off(".lg.global" + this.lgId);
+        $LG(window).off(".lg.global".concat(this.lgId));
         this.LGel.off('.lg');
         this.$container.remove();
     };
@@ -2804,5 +2871,5 @@ function lightGallery(el, options) {
     return new LightGallery(el, options);
 }
 
-export default lightGallery;
+export { lightGallery as default };
 //# sourceMappingURL=lightgallery.es5.js.map

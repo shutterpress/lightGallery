@@ -1,5 +1,5 @@
 /*!
- * lightgallery | 2.8.4 | September 25th 2025
+ * lightgallery | 2.8.4 | October 1st 2025
  * http://www.lightgalleryjs.com/
  * Copyright (c) 2020 Sachin Neravath;
  * @license GPLv3
@@ -9,9 +9,9 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
     typeof define === 'function' && define.amd ? define(factory) :
     (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.lgShare = factory());
-}(this, (function () { 'use strict';
+})(this, (function () { 'use strict';
 
-    /*! *****************************************************************************
+    /******************************************************************************
     Copyright (c) Microsoft Corporation.
 
     Permission to use, copy, modify, and/or distribute this software for any
@@ -37,13 +37,37 @@
         return __assign.apply(this, arguments);
     };
 
-    function __spreadArrays() {
-        for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-        for (var r = Array(s), k = 0, i = 0; i < il; i++)
-            for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-                r[k] = a[j];
-        return r;
+    function __read(o, n) {
+        var m = typeof Symbol === "function" && o[Symbol.iterator];
+        if (!m) return o;
+        var i = m.call(o), r, ar = [], e;
+        try {
+            while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+        }
+        catch (error) { e = { error: error }; }
+        finally {
+            try {
+                if (r && !r.done && (m = i["return"])) m.call(i);
+            }
+            finally { if (e) throw e.error; }
+        }
+        return ar;
     }
+
+    function __spreadArray(to, from, pack) {
+        if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+            if (ar || !(i in from)) {
+                if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+                ar[i] = from[i];
+            }
+        }
+        return to.concat(ar || Array.prototype.slice.call(from));
+    }
+
+    typeof SuppressedError === "function" ? SuppressedError : function (error, suppressed, message) {
+        var e = new Error(message);
+        return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
+    };
 
     var shareSettings = {
         share: true,
@@ -130,12 +154,12 @@
             if (!this.settings.share) {
                 return;
             }
-            this.shareOptions = __spreadArrays(this.getDefaultShareOptions(), this.settings.additionalShareOptions);
+            this.shareOptions = __spreadArray(__spreadArray([], __read(this.getDefaultShareOptions()), false), __read(this.settings.additionalShareOptions), false);
             this.setLgShareMarkup();
             this.core.outer
                 .find('.lg-share .lg-dropdown')
                 .append(this.getShareListHtml());
-            this.core.LGel.on(lGEvents.afterSlide + ".share", this.onAfterSlide.bind(this));
+            this.core.LGel.on("".concat(lGEvents.afterSlide, ".share"), this.onAfterSlide.bind(this));
         };
         Share.prototype.getShareListHtml = function () {
             var shareHtml = '';
@@ -146,7 +170,7 @@
         };
         Share.prototype.setLgShareMarkup = function () {
             var _this = this;
-            this.core.$toolbar.append("<button type=\"button\" aria-label=\"" + this.settings.sharePluginStrings['share'] + "\" aria-haspopup=\"true\" aria-expanded=\"false\" class=\"lg-share lg-icon\">\n                <ul class=\"lg-dropdown\" style=\"position: absolute;\"></ul></button>");
+            this.core.$toolbar.append("<button type=\"button\" aria-label=\"".concat(this.settings.sharePluginStrings['share'], "\" aria-haspopup=\"true\" aria-expanded=\"false\" class=\"lg-share lg-icon\">\n                <ul class=\"lg-dropdown\" style=\"position: absolute;\"></ul></button>"));
             this.core.outer.append('<div class="lg-dropdown-overlay"></div>');
             var $shareButton = this.core.outer.find('.lg-share');
             $shareButton.first().on('click.lg', function () {
@@ -180,10 +204,10 @@
             }, 100);
         };
         Share.prototype.getShareListItemHTML = function (type, text) {
-            return "<li><a class=\"lg-share-" + type + "\" rel=\"noopener\" target=\"_blank\"><span class=\"lg-icon\"></span><span class=\"lg-dropdown-text\">" + text + "</span></a></li>";
+            return "<li><a class=\"lg-share-".concat(type, "\" rel=\"noopener\" target=\"_blank\"><span class=\"lg-icon\"></span><span class=\"lg-dropdown-text\">").concat(text, "</span></a></li>");
         };
         Share.prototype.getDefaultShareOptions = function () {
-            return __spreadArrays((this.settings.facebook
+            return __spreadArray(__spreadArray(__spreadArray([], __read((this.settings.facebook
                 ? [
                     {
                         type: 'facebook',
@@ -192,7 +216,7 @@
                         selector: '.lg-share-facebook',
                     },
                 ]
-                : []), (this.settings.twitter
+                : [])), false), __read((this.settings.twitter
                 ? [
                     {
                         type: 'twitter',
@@ -201,7 +225,7 @@
                         selector: '.lg-share-twitter',
                     },
                 ]
-                : []), (this.settings.pinterest
+                : [])), false), __read((this.settings.pinterest
                 ? [
                     {
                         type: 'pinterest',
@@ -210,7 +234,7 @@
                         selector: '.lg-share-pinterest',
                     },
                 ]
-                : []));
+                : [])), false);
         };
         Share.prototype.destroy = function () {
             this.core.outer.find('.lg-dropdown-overlay').remove();
@@ -223,5 +247,5 @@
 
     return Share;
 
-})));
+}));
 //# sourceMappingURL=lg-share.umd.js.map

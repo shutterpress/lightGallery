@@ -279,6 +279,46 @@ export class LightGallery {
         });
     }
 
+    /**
+     * Replace toolbar icon contents using a CSS selector.
+     * Accepts settings.replaceIcons: Array<{ selector: string; html: string }>
+     * - selector: any valid CSS selector, matched within this toolbar only
+     * - html: SVG or HTML string to inject into each matched element
+     */
+    public replaceToolbarIcons(): void {
+        const settingsAny = this.settings as any;
+        const list: Array<{ selector: string; html: string }> = Array.isArray(
+            settingsAny?.replaceIcons,
+        )
+            ? settingsAny.replaceIcons
+            : [];
+        if (!list.length) return;
+
+        const root =
+            this.$toolbar && this.$toolbar.get ? this.$toolbar.get() : null;
+        if (!root) return;
+
+        list.forEach((item) => {
+            if (!item || !item.selector || !item.html) return;
+            try {
+                const nodes = root.querySelectorAll(item.selector);
+                nodes.forEach((el) => {
+                    try {
+                        const frag = document
+                            .createRange()
+                            .createContextualFragment(item.html);
+                        (el as HTMLElement).innerHTML = '';
+                        el.appendChild(frag);
+                    } catch {
+                        (el as HTMLElement).innerHTML = item.html;
+                    }
+                });
+            } catch (e) {
+                // invalid selector, ignore
+            }
+        });
+    }
+
     getSlideItem(index: number): lgQuery {
         return $LG(this.getSlideItemId(index));
     }
@@ -463,6 +503,11 @@ export class LightGallery {
         this.toggleMaximize();
 
         this.initModules();
+
+        // Re run replacements after plugins may have added toolbar buttons,
+        // and again after the gallery opens to catch late added controls
+        this.replaceToolbarIcons();
+        this.LGel.on(lGEvents.afterOpen, () => this.replaceToolbarIcons());
     }
 
     refreshOnResize(): void {

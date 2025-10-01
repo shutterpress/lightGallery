@@ -1,5 +1,5 @@
 /*!
- * lightgallery | 2.8.4 | September 25th 2025
+ * lightgallery | 2.8.4 | October 1st 2025
  * http://www.lightgalleryjs.com/
  * Copyright (c) 2020 Sachin Neravath;
  * @license GPLv3
@@ -9,9 +9,9 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
     typeof define === 'function' && define.amd ? define(factory) :
     (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.lgRotate = factory());
-}(this, (function () { 'use strict';
+})(this, (function () { 'use strict';
 
-    /*! *****************************************************************************
+    /******************************************************************************
     Copyright (c) Microsoft Corporation.
 
     Permission to use, copy, modify, and/or distribute this software for any
@@ -35,6 +35,11 @@
             return t;
         };
         return __assign.apply(this, arguments);
+    };
+
+    typeof SuppressedError === "function" ? SuppressedError : function (error, suppressed, message) {
+        var e = new Error(message);
+        return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
     };
 
     /**
@@ -98,16 +103,16 @@
         Rotate.prototype.buildTemplates = function () {
             var rotateIcons = '';
             if (this.settings.flipVertical) {
-                rotateIcons += "<button type=\"button\" id=\"lg-flip-ver\" aria-label=\"" + this.settings.rotatePluginStrings['flipVertical'] + "\" class=\"lg-flip-ver lg-icon\"></button>";
+                rotateIcons += "<button type=\"button\" id=\"lg-flip-ver\" aria-label=\"".concat(this.settings.rotatePluginStrings['flipVertical'], "\" class=\"lg-flip-ver lg-icon\"></button>");
             }
             if (this.settings.flipHorizontal) {
-                rotateIcons += "<button type=\"button\" id=\"lg-flip-hor\" aria-label=\"" + this.settings.rotatePluginStrings['flipHorizontal'] + "\" class=\"lg-flip-hor lg-icon\"></button>";
+                rotateIcons += "<button type=\"button\" id=\"lg-flip-hor\" aria-label=\"".concat(this.settings.rotatePluginStrings['flipHorizontal'], "\" class=\"lg-flip-hor lg-icon\"></button>");
             }
             if (this.settings.rotateLeft) {
-                rotateIcons += "<button type=\"button\" id=\"lg-rotate-left\" aria-label=\"" + this.settings.rotatePluginStrings['rotateLeft'] + "\" class=\"lg-rotate-left lg-icon\"></button>";
+                rotateIcons += "<button type=\"button\" id=\"lg-rotate-left\" aria-label=\"".concat(this.settings.rotatePluginStrings['rotateLeft'], "\" class=\"lg-rotate-left lg-icon\"></button>");
             }
             if (this.settings.rotateRight) {
-                rotateIcons += "<button type=\"button\" id=\"lg-rotate-right\" aria-label=\"" + this.settings.rotatePluginStrings['rotateRight'] + "\" class=\"lg-rotate-right lg-icon\"></button>";
+                rotateIcons += "<button type=\"button\" id=\"lg-rotate-right\" aria-label=\"".concat(this.settings.rotatePluginStrings['rotateRight'], "\" class=\"lg-rotate-right lg-icon\"></button>");
             }
             this.core.$toolbar.append(rotateIcons);
         };
@@ -121,7 +126,7 @@
             // even after navigating to diferent slides
             this.rotateValuesList = {};
             // event triggered after appending slide content
-            this.core.LGel.on(lGEvents.slideItemLoad + ".rotate", function (event) {
+            this.core.LGel.on("".concat(lGEvents.slideItemLoad, ".rotate"), function (event) {
                 var index = event.detail.index;
                 var rotateEl = _this.core
                     .getSlideItem(index)
@@ -157,7 +162,7 @@
                 .first()
                 .on('click.lg', this.flipVertical.bind(this));
             // Reset rotate on slide change
-            this.core.LGel.on(lGEvents.beforeSlide + ".rotate", function (event) {
+            this.core.LGel.on("".concat(lGEvents.beforeSlide, ".rotate"), function (event) {
                 if (!_this.rotateValuesList[event.detail.index]) {
                     _this.rotateValuesList[event.detail.index] = {
                         rotate: 0,
@@ -278,5 +283,5 @@
 
     return Rotate;
 
-})));
+}));
 //# sourceMappingURL=lg-rotate.umd.js.map

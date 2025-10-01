@@ -1,11 +1,11 @@
 /*!
- * lightgallery | 2.8.4 | September 25th 2025
+ * lightgallery | 2.8.4 | October 1st 2025
  * http://www.lightgalleryjs.com/
  * Copyright (c) 2020 Sachin Neravath;
  * @license GPLv3
  */
 
-/*! *****************************************************************************
+/******************************************************************************
 Copyright (c) Microsoft Corporation.
 
 Permission to use, copy, modify, and/or distribute this software for any
@@ -29,6 +29,28 @@ var __assign = function() {
         return t;
     };
     return __assign.apply(this, arguments);
+};
+
+function __read(o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+}
+
+typeof SuppressedError === "function" ? SuppressedError : function (error, suppressed, message) {
+    var e = new Error(message);
+    return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
 };
 
 var videoSettings = {
@@ -90,7 +112,7 @@ var paramsToObject = function (url) {
         .split('&')
         .map(function (p) { return p.split('='); })
         .reduce(function (obj, pair) {
-        var _a = pair.map(decodeURIComponent), key = _a[0], value = _a[1];
+        var _a = __read(pair.map(decodeURIComponent), 2), key = _a[0], value = _a[1];
         obj[key] = value;
         return obj;
     }, {});
@@ -111,7 +133,7 @@ var getYouTubeParams = function (videoInfo, youTubePlayerParamsSettings) {
     };
     var playerParamsSettings = youTubePlayerParamsSettings || {};
     var youTubePlayerParams = __assign(__assign(__assign({}, defaultYouTubePlayerParams), playerParamsSettings), slideUrlParams);
-    var youTubeParams = "?" + param(youTubePlayerParams);
+    var youTubeParams = "?".concat(param(youTubePlayerParams));
     return youTubeParams;
 };
 var isYouTubeNoCookie = function (url) {
@@ -135,15 +157,15 @@ var getVimeoURLParams = function (defaultParams, videoInfo) {
     var hash = urlWithHashWithParams.split('#')[0];
     var isPrivate = videoInfo.vimeo[1] !== hash;
     if (isPrivate) {
-        urlParams = urlParams.replace("/" + hash, '');
+        urlParams = urlParams.replace("/".concat(hash), '');
     }
     urlParams =
         urlParams[0] == '?' ? '&' + urlParams.slice(1) : urlParams || '';
-    var privateUrlParams = isPrivate ? "h=" + hash : '';
+    var privateUrlParams = isPrivate ? "h=".concat(hash) : '';
     defaultPlayerParams = privateUrlParams
-        ? "&" + defaultPlayerParams
+        ? "&".concat(defaultPlayerParams)
         : defaultPlayerParams;
-    var vimeoPlayerParams = "?" + privateUrlParams + defaultPlayerParams + urlParams;
+    var vimeoPlayerParams = "?".concat(privateUrlParams).concat(defaultPlayerParams).concat(urlParams);
     return vimeoPlayerParams;
 };
 
@@ -186,16 +208,16 @@ var Video = /** @class */ (function () {
          * Append video HTML
          * Play if autoplayFirstVideo is true
          */
-        this.core.LGel.on(lGEvents.hasVideo + ".video", this.onHasVideo.bind(this));
-        this.core.LGel.on(lGEvents.posterClick + ".video", function () {
+        this.core.LGel.on("".concat(lGEvents.hasVideo, ".video"), this.onHasVideo.bind(this));
+        this.core.LGel.on("".concat(lGEvents.posterClick, ".video"), function () {
             var $el = _this.core.getSlideItem(_this.core.index);
             _this.loadVideoOnPosterClick($el);
         });
-        this.core.LGel.on(lGEvents.slideItemLoad + ".video", this.onSlideItemLoad.bind(this));
+        this.core.LGel.on("".concat(lGEvents.slideItemLoad, ".video"), this.onSlideItemLoad.bind(this));
         // @desc fired immediately before each slide transition.
-        this.core.LGel.on(lGEvents.beforeSlide + ".video", this.onBeforeSlide.bind(this));
+        this.core.LGel.on("".concat(lGEvents.beforeSlide, ".video"), this.onBeforeSlide.bind(this));
         // @desc fired immediately after each slide transition.
-        this.core.LGel.on(lGEvents.afterSlide + ".video", this.onAfterSlide.bind(this));
+        this.core.LGel.on("".concat(lGEvents.afterSlide, ".video"), this.onAfterSlide.bind(this));
     };
     /**
      * @desc Event triggered when a slide is completely loaded
@@ -318,34 +340,34 @@ var Video = /** @class */ (function () {
             var youtubeURL = isYouTubeNoCookieURL
                 ? '//www.youtube-nocookie.com/'
                 : '//www.youtube.com/';
-            video = "<iframe allow=\"autoplay\" id=" + videoId + " class=\"lg-video-object lg-youtube " + addClass + "\" " + videoTitle + " src=\"" + youtubeURL + "embed/" + (videoInfo.youtube[1] + youTubeParams) + "\" " + commonIframeProps + "></iframe>";
+            video = "<iframe allow=\"autoplay\" id=".concat(videoId, " class=\"lg-video-object lg-youtube ").concat(addClass, "\" ").concat(videoTitle, " src=\"").concat(youtubeURL, "embed/").concat(videoInfo.youtube[1] + youTubeParams, "\" ").concat(commonIframeProps, "></iframe>");
         }
         else if (videoInfo.vimeo) {
             var videoId = 'lg-vimeo' + index;
             var playerParams = getVimeoURLParams(this.settings.vimeoPlayerParams, videoInfo);
-            video = "<iframe allow=\"autoplay\" id=" + videoId + " class=\"lg-video-object lg-vimeo " + addClass + "\" " + videoTitle + " src=\"//player.vimeo.com/video/" + (videoInfo.vimeo[1] + playerParams) + "\" " + commonIframeProps + "></iframe>";
+            video = "<iframe allow=\"autoplay\" id=".concat(videoId, " class=\"lg-video-object lg-vimeo ").concat(addClass, "\" ").concat(videoTitle, " src=\"//player.vimeo.com/video/").concat(videoInfo.vimeo[1] + playerParams, "\" ").concat(commonIframeProps, "></iframe>");
         }
         else if (videoInfo.wistia) {
             var wistiaId = 'lg-wistia' + index;
             var playerParams = param(this.settings.wistiaPlayerParams);
             playerParams = playerParams ? '?' + playerParams : '';
-            video = "<iframe allow=\"autoplay\" id=\"" + wistiaId + "\" src=\"//fast.wistia.net/embed/iframe/" + (videoInfo.wistia[4] + playerParams) + "\" " + videoTitle + " class=\"wistia_embed lg-video-object lg-wistia " + addClass + "\" name=\"wistia_embed\" " + commonIframeProps + "></iframe>";
+            video = "<iframe allow=\"autoplay\" id=\"".concat(wistiaId, "\" src=\"//fast.wistia.net/embed/iframe/").concat(videoInfo.wistia[4] + playerParams, "\" ").concat(videoTitle, " class=\"wistia_embed lg-video-object lg-wistia ").concat(addClass, "\" name=\"wistia_embed\" ").concat(commonIframeProps, "></iframe>");
         }
         else if (videoInfo.html5) {
             var html5VideoMarkup = '';
             for (var i = 0; i < html5Video.source.length; i++) {
                 var type = html5Video.source[i].type;
-                var typeAttr = type ? "type=\"" + type + "\"" : '';
-                html5VideoMarkup += "<source src=\"" + html5Video.source[i].src + "\" " + typeAttr + ">";
+                var typeAttr = type ? "type=\"".concat(type, "\"") : '';
+                html5VideoMarkup += "<source src=\"".concat(html5Video.source[i].src, "\" ").concat(typeAttr, ">");
             }
             if (html5Video.tracks) {
                 var _loop_1 = function (i) {
                     var trackAttributes = '';
                     var track = html5Video.tracks[i];
                     Object.keys(track || {}).forEach(function (key) {
-                        trackAttributes += key + "=\"" + track[key] + "\" ";
+                        trackAttributes += "".concat(key, "=\"").concat(track[key], "\" ");
                     });
-                    html5VideoMarkup += "<track " + trackAttributes + ">";
+                    html5VideoMarkup += "<track ".concat(trackAttributes, ">");
                 };
                 for (var i = 0; i < html5Video.tracks.length; i++) {
                     _loop_1(i);
@@ -354,11 +376,11 @@ var Video = /** @class */ (function () {
             var html5VideoAttrs_1 = '';
             var videoAttributes_1 = html5Video.attributes || {};
             Object.keys(videoAttributes_1 || {}).forEach(function (key) {
-                html5VideoAttrs_1 += key + "=\"" + videoAttributes_1[key] + "\" ";
+                html5VideoAttrs_1 += "".concat(key, "=\"").concat(videoAttributes_1[key], "\" ");
             });
-            video = "<video class=\"lg-video-object lg-html5 " + (this.settings.videojs && this.settings.videojsTheme
+            video = "<video class=\"lg-video-object lg-html5 ".concat(this.settings.videojs && this.settings.videojsTheme
                 ? this.settings.videojsTheme + ' '
-                : '') + " " + (this.settings.videojs ? ' video-js' : '') + "\" " + html5VideoAttrs_1 + ">\n                " + html5VideoMarkup + "\n                Your browser does not support HTML5 video.\n            </video>";
+                : '', " ").concat(this.settings.videojs ? ' video-js' : '', "\" ").concat(html5VideoAttrs_1, ">\n                ").concat(html5VideoMarkup, "\n                Your browser does not support HTML5 video.\n            </video>");
         }
         return video;
     };
@@ -378,7 +400,8 @@ var Video = /** @class */ (function () {
                 e.stopPropagation();
             });
         }
-        if (this.settings.videojs && ((_a = this.core.galleryItems[videoParams.index].__slideVideoInfo) === null || _a === void 0 ? void 0 : _a.html5)) {
+        if (this.settings.videojs &&
+            ((_a = this.core.galleryItems[videoParams.index].__slideVideoInfo) === null || _a === void 0 ? void 0 : _a.html5)) {
             try {
                 return videojs($videoElement.get(), this.settings.videojsOptions);
             }
@@ -440,10 +463,10 @@ var Video = /** @class */ (function () {
             return;
         if (videoInfo.youtube) {
             try {
-                $videoElement.get().contentWindow.postMessage("{\"event\":\"command\",\"func\":\"" + action + "Video\",\"args\":\"\"}", '*');
+                $videoElement.get().contentWindow.postMessage("{\"event\":\"command\",\"func\":\"".concat(action, "Video\",\"args\":\"\"}"), '*');
             }
             catch (e) {
-                console.error("lightGallery:- " + e);
+                console.error("lightGallery:- ".concat(e));
             }
         }
         else if (videoInfo.vimeo) {
@@ -541,5 +564,5 @@ var Video = /** @class */ (function () {
     return Video;
 }());
 
-export default Video;
+export { Video as default };
 //# sourceMappingURL=lg-video.es5.js.map

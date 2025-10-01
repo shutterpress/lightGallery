@@ -1,5 +1,5 @@
 /*!
- * lightgallery | 2.8.4 | September 25th 2025
+ * lightgallery | 2.8.4 | October 1st 2025
  * http://www.lightgalleryjs.com/
  * Copyright (c) 2020 Sachin Neravath;
  * @license GPLv3
@@ -9,9 +9,9 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
     typeof define === 'function' && define.amd ? define(factory) :
     (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.lgFullscreen = factory());
-}(this, (function () { 'use strict';
+})(this, (function () { 'use strict';
 
-    /*! *****************************************************************************
+    /******************************************************************************
     Copyright (c) Microsoft Corporation.
 
     Permission to use, copy, modify, and/or distribute this software for any
@@ -35,6 +35,11 @@
             return t;
         };
         return __assign.apply(this, arguments);
+    };
+
+    typeof SuppressedError === "function" ? SuppressedError : function (error, suppressed, message) {
+        var e = new Error(message);
+        return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
     };
 
     var fullscreenSettings = {
@@ -64,7 +69,7 @@
                     return;
                 }
                 else {
-                    fullScreen = "<button type=\"button\" aria-label=\"" + this.settings.fullscreenPluginStrings['toggleFullscreen'] + "\" class=\"lg-fullscreen lg-icon\"></button>";
+                    fullScreen = "<button type=\"button\" aria-label=\"".concat(this.settings.fullscreenPluginStrings['toggleFullscreen'], "\" class=\"lg-fullscreen lg-icon\"></button>");
                     this.core.$toolbar.append(fullScreen);
                     this.fullScreen();
                 }
@@ -108,7 +113,7 @@
         // https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/Using_full_screen_mode
         FullScreen.prototype.fullScreen = function () {
             var _this = this;
-            this.$LG(document).on("fullscreenchange.lg.global" + this.core.lgId + " \n            webkitfullscreenchange.lg.global" + this.core.lgId + " \n            mozfullscreenchange.lg.global" + this.core.lgId + " \n            MSFullscreenChange.lg.global" + this.core.lgId, function () {
+            this.$LG(document).on("fullscreenchange.lg.global".concat(this.core.lgId, " \n            webkitfullscreenchange.lg.global").concat(this.core.lgId, " \n            mozfullscreenchange.lg.global").concat(this.core.lgId, " \n            MSFullscreenChange.lg.global").concat(this.core.lgId), function () {
                 if (!_this.core.lgOpened)
                     return;
                 _this.core.outer.toggleClass('lg-fullscreen-on');
@@ -132,12 +137,12 @@
             }
         };
         FullScreen.prototype.destroy = function () {
-            this.$LG(document).off("fullscreenchange.lg.global" + this.core.lgId + " \n            webkitfullscreenchange.lg.global" + this.core.lgId + " \n            mozfullscreenchange.lg.global" + this.core.lgId + " \n            MSFullscreenChange.lg.global" + this.core.lgId);
+            this.$LG(document).off("fullscreenchange.lg.global".concat(this.core.lgId, " \n            webkitfullscreenchange.lg.global").concat(this.core.lgId, " \n            mozfullscreenchange.lg.global").concat(this.core.lgId, " \n            MSFullscreenChange.lg.global").concat(this.core.lgId));
         };
         return FullScreen;
     }());
 
     return FullScreen;
 
-})));
+}));
 //# sourceMappingURL=lg-fullscreen.umd.js.map

@@ -1,5 +1,5 @@
 /*!
- * lightgallery | 2.8.4 | September 25th 2025
+ * lightgallery | 2.8.4 | October 1st 2025
  * http://www.lightgalleryjs.com/
  * Copyright (c) 2020 Sachin Neravath;
  * @license GPLv3
@@ -9,9 +9,9 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
     typeof define === 'function' && define.amd ? define(factory) :
     (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.lgAutoplay = factory());
-}(this, (function () { 'use strict';
+})(this, (function () { 'use strict';
 
-    /*! *****************************************************************************
+    /******************************************************************************
     Copyright (c) Microsoft Corporation.
 
     Permission to use, copy, modify, and/or distribute this software for any
@@ -35,6 +35,11 @@
             return t;
         };
         return __assign.apply(this, arguments);
+    };
+
+    typeof SuppressedError === "function" ? SuppressedError : function (error, suppressed, message) {
+        var e = new Error(message);
+        return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
     };
 
     /**
@@ -116,25 +121,25 @@
             }
             // Start autoplay
             if (this.settings.slideShowAutoplay) {
-                this.core.LGel.once(lGEvents.slideItemLoad + ".autoplay", function () {
+                this.core.LGel.once("".concat(lGEvents.slideItemLoad, ".autoplay"), function () {
                     _this.startAutoPlay();
                 });
             }
             // cancel interval on touchstart and dragstart
-            this.core.LGel.on(lGEvents.dragStart + ".autoplay touchstart.lg.autoplay", function () {
+            this.core.LGel.on("".concat(lGEvents.dragStart, ".autoplay touchstart.lg.autoplay"), function () {
                 if (_this.interval) {
                     _this.stopAutoPlay();
                     _this.pausedOnTouchDrag = true;
                 }
             });
             // restore autoplay if autoplay canceled from touchstart / dragstart
-            this.core.LGel.on(lGEvents.dragEnd + ".autoplay touchend.lg.autoplay", function () {
+            this.core.LGel.on("".concat(lGEvents.dragEnd, ".autoplay touchend.lg.autoplay"), function () {
                 if (!_this.interval && _this.pausedOnTouchDrag) {
                     _this.startAutoPlay();
                     _this.pausedOnTouchDrag = false;
                 }
             });
-            this.core.LGel.on(lGEvents.beforeSlide + ".autoplay", function () {
+            this.core.LGel.on("".concat(lGEvents.beforeSlide, ".autoplay"), function () {
                 _this.showProgressBar();
                 if (!_this.fromAuto && _this.interval) {
                     _this.stopAutoPlay();
@@ -146,7 +151,7 @@
                 _this.fromAuto = false;
             });
             // restore autoplay if autoplay canceled from touchstart / dragstart
-            this.core.LGel.on(lGEvents.afterSlide + ".autoplay", function () {
+            this.core.LGel.on("".concat(lGEvents.afterSlide, ".autoplay"), function () {
                 if (_this.pausedOnSlideChange &&
                     !_this.interval &&
                     _this.settings.forceSlideShowAutoplay) {
@@ -178,7 +183,7 @@
         // Manage autoplay via play/stop buttons
         Autoplay.prototype.controls = function () {
             var _this = this;
-            var _html = "<button aria-label=\"" + this.settings.autoplayPluginStrings['toggleAutoplay'] + "\" type=\"button\" class=\"lg-autoplay-button lg-icon\"></button>";
+            var _html = "<button aria-label=\"".concat(this.settings.autoplayPluginStrings['toggleAutoplay'], "\" type=\"button\" class=\"lg-autoplay-button lg-icon\"></button>");
             // Append autoplay controls
             this.core.outer
                 .find(this.settings.appendAutoplayControlsTo)
@@ -254,5 +259,5 @@
 
     return Autoplay;
 
-})));
+}));
 //# sourceMappingURL=lg-autoplay.umd.js.map

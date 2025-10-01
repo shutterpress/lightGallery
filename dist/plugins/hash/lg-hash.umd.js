@@ -1,5 +1,5 @@
 /*!
- * lightgallery | 2.8.4 | September 25th 2025
+ * lightgallery | 2.8.4 | October 1st 2025
  * http://www.lightgalleryjs.com/
  * Copyright (c) 2020 Sachin Neravath;
  * @license GPLv3
@@ -9,9 +9,9 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
     typeof define === 'function' && define.amd ? define(factory) :
     (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.lgHash = factory());
-}(this, (function () { 'use strict';
+})(this, (function () { 'use strict';
 
-    /*! *****************************************************************************
+    /******************************************************************************
     Copyright (c) Microsoft Corporation.
 
     Permission to use, copy, modify, and/or distribute this software for any
@@ -35,6 +35,11 @@
             return t;
         };
         return __assign.apply(this, arguments);
+    };
+
+    typeof SuppressedError === "function" ? SuppressedError : function (error, suppressed, message) {
+        var e = new Error(message);
+        return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
     };
 
     /**
@@ -96,10 +101,10 @@
                 _this.buildFromHash();
             }, 100);
             // Change hash value on after each slide transition
-            this.core.LGel.on(lGEvents.afterSlide + ".hash", this.onAfterSlide.bind(this));
-            this.core.LGel.on(lGEvents.afterClose + ".hash", this.onCloseAfter.bind(this));
+            this.core.LGel.on("".concat(lGEvents.afterSlide, ".hash"), this.onAfterSlide.bind(this));
+            this.core.LGel.on("".concat(lGEvents.afterClose, ".hash"), this.onCloseAfter.bind(this));
             // Listen hash change and change the slide according to slide value
-            this.$LG(window).on("hashchange.lg.hash.global" + this.core.lgId, this.onHashchange.bind(this));
+            this.$LG(window).on("hashchange.lg.hash.global".concat(this.core.lgId), this.onHashchange.bind(this));
         };
         Hash.prototype.onAfterSlide = function (event) {
             var slideName = this.core.galleryItems[event.detail.index].slideName;
@@ -195,12 +200,12 @@
         Hash.prototype.destroy = function () {
             this.core.LGel.off('.lg.hash');
             this.core.LGel.off('.hash');
-            this.$LG(window).off("hashchange.lg.hash.global" + this.core.lgId);
+            this.$LG(window).off("hashchange.lg.hash.global".concat(this.core.lgId));
         };
         return Hash;
     }());
 
     return Hash;
 
-})));
+}));
 //# sourceMappingURL=lg-hash.umd.js.map

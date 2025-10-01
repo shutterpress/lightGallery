@@ -1,11 +1,11 @@
 /*!
- * lightgallery | 2.8.4 | September 25th 2025
+ * lightgallery | 2.8.4 | October 1st 2025
  * http://www.lightgalleryjs.com/
  * Copyright (c) 2020 Sachin Neravath;
  * @license GPLv3
  */
 
-/*! *****************************************************************************
+/******************************************************************************
 Copyright (c) Microsoft Corporation.
 
 Permission to use, copy, modify, and/or distribute this software for any
@@ -29,6 +29,11 @@ var __assign = function() {
         return t;
     };
     return __assign.apply(this, arguments);
+};
+
+typeof SuppressedError === "function" ? SuppressedError : function (error, suppressed, message) {
+    var e = new Error(message);
+    return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
 };
 
 /**
@@ -113,7 +118,7 @@ var MediumZoom = /** @class */ (function () {
         if (!this.settings.mediumZoom) {
             return;
         }
-        this.core.LGel.on(lGEvents.beforeOpen + ".medium", function () {
+        this.core.LGel.on("".concat(lGEvents.beforeOpen, ".medium"), function () {
             _this.core.$backdrop.css('background-color', _this.core.galleryItems[_this.core.index].lgBackgroundColor ||
                 _this.settings.backgroundColor);
         });
@@ -128,5 +133,5 @@ var MediumZoom = /** @class */ (function () {
     return MediumZoom;
 }());
 
-export default MediumZoom;
+export { MediumZoom as default };
 //# sourceMappingURL=lg-medium-zoom.es5.js.map

@@ -1,11 +1,11 @@
 /*!
- * lightgallery | 2.8.4 | September 25th 2025
+ * lightgallery | 2.8.4 | October 1st 2025
  * http://www.lightgalleryjs.com/
  * Copyright (c) 2020 Sachin Neravath;
  * @license GPLv3
  */
 
-/*! *****************************************************************************
+/******************************************************************************
 Copyright (c) Microsoft Corporation.
 
 Permission to use, copy, modify, and/or distribute this software for any
@@ -29,6 +29,11 @@ var __assign = function() {
         return t;
     };
     return __assign.apply(this, arguments);
+};
+
+typeof SuppressedError === "function" ? SuppressedError : function (error, suppressed, message) {
+    var e = new Error(message);
+    return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
 };
 
 /**
@@ -90,7 +95,7 @@ var RelativeCaption = /** @class */ (function () {
         if (!this.settings.relativeCaption) {
             return;
         }
-        this.core.LGel.on(lGEvents.slideItemLoad + ".caption", function (event) {
+        this.core.LGel.on("".concat(lGEvents.slideItemLoad, ".caption"), function (event) {
             var _a = event.detail, index = _a.index, delay = _a.delay;
             setTimeout(function () {
                 if (index === _this.core.index) {
@@ -98,7 +103,7 @@ var RelativeCaption = /** @class */ (function () {
                 }
             }, delay);
         });
-        this.core.LGel.on(lGEvents.afterSlide + ".caption", function (event) {
+        this.core.LGel.on("".concat(lGEvents.afterSlide, ".caption"), function (event) {
             var index = event.detail.index;
             setTimeout(function () {
                 var slide = _this.core.getSlideItem(index);
@@ -107,14 +112,14 @@ var RelativeCaption = /** @class */ (function () {
                 }
             });
         });
-        this.core.LGel.on(lGEvents.beforeSlide + ".caption", function (event) {
+        this.core.LGel.on("".concat(lGEvents.beforeSlide, ".caption"), function (event) {
             var index = event.detail.index;
             setTimeout(function () {
                 var slide = _this.core.getSlideItem(index);
                 slide.removeClass('lg-show-caption');
             });
         });
-        this.core.LGel.on(lGEvents.containerResize + ".caption", function (event) {
+        this.core.LGel.on("".concat(lGEvents.containerResize, ".caption"), function (event) {
             _this.setRelativeCaption(_this.core.index);
         });
     };
@@ -123,10 +128,10 @@ var RelativeCaption = /** @class */ (function () {
             .getSlideItem(index)
             .find('.lg-relative-caption-item');
         var $subHtml = this.core.getSlideItem(index).find('.lg-sub-html');
-        $subHtml.css('width', rect.width + "px").css('left', rect.left + "px");
+        $subHtml.css('width', "".concat(rect.width, "px")).css('left', "".concat(rect.left, "px"));
         var subHtmlRect = $subHtmlInner.get().getBoundingClientRect();
         var bottom = slideWrapRect.bottom - rect.bottom - subHtmlRect.height;
-        $subHtml.css('top', "auto").css('bottom', Math.max(bottom, 0) + "px");
+        $subHtml.css('top', "auto").css('bottom', "".concat(Math.max(bottom, 0), "px"));
     };
     RelativeCaption.prototype.setRelativeCaption = function (index) {
         var slide = this.core.getSlideItem(index);
@@ -150,5 +155,5 @@ var RelativeCaption = /** @class */ (function () {
     return RelativeCaption;
 }());
 
-export default RelativeCaption;
+export { RelativeCaption as default };
 //# sourceMappingURL=lg-relative-caption.es5.js.map
