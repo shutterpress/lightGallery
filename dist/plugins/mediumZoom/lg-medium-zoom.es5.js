@@ -1,5 +1,5 @@
 /*!
- * lightgallery | 2.8.4 | October 1st 2025
+ * lightgallery | 2.8.5 | October 1st 2025
  * http://www.lightgalleryjs.com/
  * Copyright (c) 2020 Sachin Neravath;
  * @license GPLv3

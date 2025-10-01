@@ -1,5 +1,5 @@
 /*!
- * lightgallery | 2.8.4 | October 1st 2025
+ * lightgallery | 2.8.5 | October 1st 2025
  * http://www.lightgalleryjs.com/
  * Copyright (c) 2020 Sachin Neravath;
  * @license GPLv3
@@ -250,7 +250,8 @@ var lgQuery = /** @class */ (function () {
             return group1.toUpperCase();
         });
         if (this.cssVenderPrefixes.indexOf(property) !== -1) {
-            el.style[property.charAt(0).toLowerCase() + property.slice(1)] = value;
+            el.style[property.charAt(0).toLowerCase() + property.slice(1)] =
+                value;
             el.style['webkit' + property] = value;
             el.style['moz' + property] = value;
             el.style['ms' + property] = value;
