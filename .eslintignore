@@ -1,0 +1,7 @@
+lightgallery-angular/**
+lightgallery-react/**
+lightgallery-vue/**
+lightgallery-lit/**
+dist/**
+site/**
+**/*.min.js

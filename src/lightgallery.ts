@@ -121,8 +121,6 @@ export class LightGallery {
 
         this.init();
 
-        this.validateLicense();
-
         return this;
     }
 
@@ -241,14 +239,84 @@ export class LightGallery {
         });
     }
 
-    validateLicense(): void {
-        if (!this.settings.licenseKey) {
-            console.error('Please provide a valid license key');
-        } else if (this.settings.licenseKey === '0000-0000-000-0000') {
-            console.warn(
-                `lightGallery: ${this.settings.licenseKey} license key is not valid for production use`,
+    /**
+     * Append user-defined toolbar icons.
+     * Accepts settings.customToolbar: Array<{ id: string; html: string; ariaLabel?: string; onClick?: (instance: LightGallery, ev: Event) => void; }>.
+     */
+    private appendCustomIcons(): void {
+        const settingsAny = this.settings as any;
+        const custom: Array<{
+            id: string;
+            html: string;
+            ariaLabel?: string;
+            onClick?: (instance: LightGallery, ev: Event) => void;
+        }> = Array.isArray(settingsAny?.customToolbar)
+            ? settingsAny.customToolbar
+            : [];
+        if (!custom.length) return;
+
+        custom.forEach((btn) => {
+            if (!btn || !btn.id || !btn.html) return;
+            const id = this.getIdName(btn.id);
+            const aria = btn.ariaLabel ? `aria-label="${btn.ariaLabel}"` : '';
+            // Append button HTML to the toolbar
+            this.$toolbar.append(
+                `<button type="button" id="${id}" ${aria} class="lg-icon lg-custom-icon lg-custom-icon-${btn.id}">${btn.html}</button>`,
             );
-        }
+            // Bind click handler
+            this.getElementById(btn.id).on('click.lg', (ev: Event) => {
+                try {
+                    btn.onClick?.(this, ev);
+                } catch (e) {
+                    // no-op
+                }
+                this.LGel.trigger('lgCustomIconClick', {
+                    id: btn.id,
+                    instance: this,
+                    event: ev,
+                });
+            });
+        });
+    }
+
+    /**
+     * Replace toolbar icon contents using a CSS selector.
+     * Accepts settings.replaceIcons: Array<{ selector: string; html: string }>
+     * - selector: any valid CSS selector, matched within this toolbar only
+     * - html: SVG or HTML string to inject into each matched element
+     */
+    public replaceToolbarIcons(): void {
+        const settingsAny = this.settings as any;
+        const list: Array<{ selector: string; html: string }> = Array.isArray(
+            settingsAny?.replaceIcons,
+        )
+            ? settingsAny.replaceIcons
+            : [];
+        if (!list.length) return;
+
+        const root =
+            this.$toolbar && this.$toolbar.get ? this.$toolbar.get() : null;
+        if (!root) return;
+
+        list.forEach((item) => {
+            if (!item || !item.selector || !item.html) return;
+            try {
+                const nodes = root.querySelectorAll(item.selector);
+                nodes.forEach((el) => {
+                    try {
+                        const frag = document
+                            .createRange()
+                            .createContextualFragment(item.html);
+                        (el as HTMLElement).innerHTML = '';
+                        el.appendChild(frag);
+                    } catch {
+                        (el as HTMLElement).innerHTML = item.html;
+                    }
+                });
+            } catch (e) {
+                // invalid selector, ignore
+            }
+        });
     }
 
     getSlideItem(index: number): lgQuery {
@@ -417,6 +485,9 @@ export class LightGallery {
             );
         }
 
+        // Append any custom toolbar icons provided via settings
+        this.appendCustomIcons();
+
         this.counter();
 
         $LG(window).on(
@@ -432,6 +503,11 @@ export class LightGallery {
         this.toggleMaximize();
 
         this.initModules();
+
+        // Re run replacements after plugins may have added toolbar buttons,
+        // and again after the gallery opens to catch late added controls
+        this.replaceToolbarIcons();
+        this.LGel.on(lGEvents.afterOpen, () => this.replaceToolbarIcons());
     }
 
     refreshOnResize(): void {
