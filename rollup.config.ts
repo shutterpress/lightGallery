@@ -14,6 +14,13 @@ import pluginConfigs from './plugins-config-rollup.json';
 
 const libraryName = 'lightGallery';
 const libraryFileName = 'index';
+const defaultBannerFile = path.join(__dirname, '.banner');
+
+const getBannerFile = (config) => {
+    return config.name === 'proofing'
+        ? path.join(__dirname, '.banner-proofing')
+        : defaultBannerFile;
+};
 
 const umdConfigs = pluginConfigs.map((config) => {
     return {
@@ -49,7 +56,7 @@ const umdConfigs = pluginConfigs.map((config) => {
                 banner: {
                     commentStyle: 'ignored',
                     content: {
-                        file: path.join(__dirname, '.banner'),
+                        file: getBannerFile(config),
                     },
                 },
             }),
@@ -90,7 +97,7 @@ const minConfigs = pluginConfigs.map((config) => {
                 banner: {
                     commentStyle: 'regular',
                     content: {
-                        file: path.join(__dirname, '.banner'),
+                        file: getBannerFile(config),
                     },
                 },
             }),

@@ -1,0 +1,4 @@
+lightGallery Proofing Plugin | <%= pkg.version %> | <%= moment().format('MMMM Do YYYY') %>
+<%= pkg.homepage %>
+Copyright (c) 2026 ShutterPress;
+@license GPLv3
