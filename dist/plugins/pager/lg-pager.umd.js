@@ -1,6 +1,6 @@
 /*!
- * lightgallery | 2.8.5 | October 1st 2025
- * http://www.lightgalleryjs.com/
+ * lightgallery | 2.8.5 | March 31st 2026
+ * https://shutterpress.io/
  * Copyright (c) 2020 Sachin Neravath;
  * @license GPLv3
  */
