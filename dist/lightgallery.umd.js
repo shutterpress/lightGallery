@@ -1,5 +1,5 @@
 /*!
- * lightgallery | 2.9.0 | October 1st 2025
+ * lightgallery | 2.9.1 | March 31st 2026
  * http://www.lightgalleryjs.com/
  * Copyright (c) 2020 Sachin Neravath;
  * @license GPLv3
@@ -9,7 +9,7 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
     typeof define === 'function' && define.amd ? define(factory) :
     (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.lightGallery = factory());
-}(this, (function () { 'use strict';
+})(this, (function () { 'use strict';
 
     /*! *****************************************************************************
     Copyright (c) Microsoft Corporation.
@@ -37,12 +37,27 @@
         return __assign.apply(this, arguments);
     };
 
-    function __spreadArrays() {
-        for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-        for (var r = Array(s), k = 0, i = 0; i < il; i++)
-            for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-                r[k] = a[j];
-        return r;
+    function __read(o, n) {
+        var m = typeof Symbol === "function" && o[Symbol.iterator];
+        if (!m) return o;
+        var i = m.call(o), r, ar = [], e;
+        try {
+            while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+        }
+        catch (error) { e = { error: error }; }
+        finally {
+            try {
+                if (r && !r.done && (m = i["return"])) m.call(i);
+            }
+            finally { if (e) throw e.error; }
+        }
+        return ar;
+    }
+
+    function __spread() {
+        for (var ar = [], i = 0; i < arguments.length; i++)
+            ar = ar.concat(__read(arguments[i]));
+        return ar;
     }
 
     /**
@@ -83,7 +98,6 @@
         mode: 'lg-slide',
         easing: 'ease',
         speed: 400,
-        licenseKey: '0000-0000-000-0000',
         height: '100%',
         width: '100%',
         addClass: '',
@@ -233,7 +247,8 @@
                 return group1.toUpperCase();
             });
             if (this.cssVenderPrefixes.indexOf(property) !== -1) {
-                el.style[property.charAt(0).toLowerCase() + property.slice(1)] = value;
+                el.style[property.charAt(0).toLowerCase() + property.slice(1)] =
+                    value;
                 el.style['webkit' + property] = value;
                 el.style['moz' + property] = value;
                 el.style['ms' + property] = value;
@@ -777,7 +792,7 @@
          */
         getDynamicOptions: function (items, extraProps, getCaptionFromTitleOrAlt, exThumbImage) {
             var dynamicElements = [];
-            var availableDynamicOptions = __spreadArrays(defaultDynamicOptions, extraProps);
+            var availableDynamicOptions = __spread(defaultDynamicOptions, extraProps);
             [].forEach.call(items, function (item) {
                 var dynamicEl = {};
                 for (var i = 0; i < item.attributes.length; i++) {
@@ -897,7 +912,6 @@
             this.normalizeSettings();
             // Gallery items
             this.init();
-            this.validateLicense();
             return this;
         }
         LightGallery.prototype.generateSettings = function (options) {
@@ -998,13 +1012,80 @@
                 _this.plugins.push(new plugin(_this, $LG));
             });
         };
-        LightGallery.prototype.validateLicense = function () {
-            if (!this.settings.licenseKey) {
-                console.error('Please provide a valid license key');
-            }
-            else if (this.settings.licenseKey === '0000-0000-000-0000') {
-                console.warn("lightGallery: " + this.settings.licenseKey + " license key is not valid for production use");
-            }
+        /**
+         * Append user-defined toolbar icons.
+         * Accepts settings.customToolbar: Array<{ id: string; html: string; ariaLabel?: string; onClick?: (instance: LightGallery, ev: Event) => void; }>.
+         */
+        LightGallery.prototype.appendCustomIcons = function () {
+            var _this = this;
+            var settingsAny = this.settings;
+            var custom = Array.isArray(settingsAny === null || settingsAny === void 0 ? void 0 : settingsAny.customToolbar)
+                ? settingsAny.customToolbar
+                : [];
+            if (!custom.length)
+                return;
+            custom.forEach(function (btn) {
+                if (!btn || !btn.id || !btn.html)
+                    return;
+                var id = _this.getIdName(btn.id);
+                var aria = btn.ariaLabel ? "aria-label=\"" + btn.ariaLabel + "\"" : '';
+                // Append button HTML to the toolbar
+                _this.$toolbar.append("<button type=\"button\" id=\"" + id + "\" " + aria + " class=\"lg-icon lg-custom-icon lg-custom-icon-" + btn.id + "\">" + btn.html + "</button>");
+                // Bind click handler
+                _this.getElementById(btn.id).on('click.lg', function (ev) {
+                    var _a;
+                    try {
+                        (_a = btn.onClick) === null || _a === void 0 ? void 0 : _a.call(btn, _this, ev);
+                    }
+                    catch (e) {
+                        // no-op
+                    }
+                    _this.LGel.trigger('lgCustomIconClick', {
+                        id: btn.id,
+                        instance: _this,
+                        event: ev,
+                    });
+                });
+            });
+        };
+        /**
+         * Replace toolbar icon contents using a CSS selector.
+         * Accepts settings.replaceIcons: Array<{ selector: string; html: string }>
+         * - selector: any valid CSS selector, matched within this toolbar only
+         * - html: SVG or HTML string to inject into each matched element
+         */
+        LightGallery.prototype.replaceToolbarIcons = function () {
+            var settingsAny = this.settings;
+            var list = Array.isArray(settingsAny === null || settingsAny === void 0 ? void 0 : settingsAny.replaceIcons)
+                ? settingsAny.replaceIcons
+                : [];
+            if (!list.length)
+                return;
+            var root = this.$toolbar && this.$toolbar.get ? this.$toolbar.get() : null;
+            if (!root)
+                return;
+            list.forEach(function (item) {
+                if (!item || !item.selector || !item.html)
+                    return;
+                try {
+                    var nodes = root.querySelectorAll(item.selector);
+                    nodes.forEach(function (el) {
+                        try {
+                            var frag = document
+                                .createRange()
+                                .createContextualFragment(item.html);
+                            el.innerHTML = '';
+                            el.appendChild(frag);
+                        }
+                        catch (_a) {
+                            el.innerHTML = item.html;
+                        }
+                    });
+                }
+                catch (e) {
+                    // invalid selector, ignore
+                }
+            });
         };
         LightGallery.prototype.getSlideItem = function (index) {
             return $LG(this.getSlideItemId(index));
@@ -1088,6 +1169,8 @@
             if (this.settings.download) {
                 this.$toolbar.append("<a id=\"" + this.getIdName('lg-download') + "\" target=\"_blank\" rel=\"noopener\" aria-label=\"" + this.settings.strings['download'] + "\" download class=\"lg-download lg-icon\"></a>");
             }
+            // Append any custom toolbar icons provided via settings
+            this.appendCustomIcons();
             this.counter();
             $LG(window).on("resize.lg.global" + this.lgId + " orientationchange.lg.global" + this.lgId, function () {
                 _this.refreshOnResize();
@@ -1096,6 +1179,10 @@
             this.manageCloseGallery();
             this.toggleMaximize();
             this.initModules();
+            // Re run replacements after plugins may have added toolbar buttons,
+            // and again after the gallery opens to catch late added controls
+            this.replaceToolbarIcons();
+            this.LGel.on(lGEvents.afterOpen, function () { return _this.replaceToolbarIcons(); });
         };
         LightGallery.prototype.refreshOnResize = function () {
             if (this.lgOpened) {
@@ -2790,5 +2877,5 @@
 
     return lightGallery;
 
-})));
+}));
 //# sourceMappingURL=lightgallery.umd.js.map

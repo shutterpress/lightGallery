@@ -1,5 +1,5 @@
 /*!
- * lightgallery | 2.9.0 | October 1st 2025
+ * lightgallery | 2.9.1 | March 31st 2026
  * http://www.lightgalleryjs.com/
  * Copyright (c) 2020 Sachin Neravath;
  * @license GPLv3
@@ -9,7 +9,7 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
     typeof define === 'function' && define.amd ? define(factory) :
     (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.lgAutoplay = factory());
-}(this, (function () { 'use strict';
+})(this, (function () { 'use strict';
 
     /*! *****************************************************************************
     Copyright (c) Microsoft Corporation.
@@ -254,5 +254,5 @@
 
     return Autoplay;
 
-})));
+}));
 //# sourceMappingURL=lg-autoplay.umd.js.map

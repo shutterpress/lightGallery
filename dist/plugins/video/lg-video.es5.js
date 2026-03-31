@@ -1,5 +1,5 @@
 /*!
- * lightgallery | 2.9.0 | October 1st 2025
+ * lightgallery | 2.9.1 | March 31st 2026
  * http://www.lightgalleryjs.com/
  * Copyright (c) 2020 Sachin Neravath;
  * @license GPLv3
@@ -30,6 +30,23 @@ var __assign = function() {
     };
     return __assign.apply(this, arguments);
 };
+
+function __read(o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+}
 
 var videoSettings = {
     autoplayFirstVideo: true,
@@ -90,7 +107,7 @@ var paramsToObject = function (url) {
         .split('&')
         .map(function (p) { return p.split('='); })
         .reduce(function (obj, pair) {
-        var _a = pair.map(decodeURIComponent), key = _a[0], value = _a[1];
+        var _a = __read(pair.map(decodeURIComponent), 2), key = _a[0], value = _a[1];
         obj[key] = value;
         return obj;
     }, {});
@@ -541,5 +558,5 @@ var Video = /** @class */ (function () {
     return Video;
 }());
 
-export default Video;
+export { Video as default };
 //# sourceMappingURL=lg-video.es5.js.map

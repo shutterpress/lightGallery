@@ -1,5 +1,5 @@
 /*!
- * lightgallery | 2.9.0 | October 1st 2025
+ * lightgallery | 2.9.1 | March 31st 2026
  * http://www.lightgalleryjs.com/
  * Copyright (c) 2020 Sachin Neravath;
  * @license GPLv3
@@ -150,5 +150,5 @@ var RelativeCaption = /** @class */ (function () {
     return RelativeCaption;
 }());
 
-export default RelativeCaption;
+export { RelativeCaption as default };
 //# sourceMappingURL=lg-relative-caption.es5.js.map

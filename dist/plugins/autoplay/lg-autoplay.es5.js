@@ -1,5 +1,5 @@
 /*!
- * lightgallery | 2.9.0 | October 1st 2025
+ * lightgallery | 2.9.1 | March 31st 2026
  * http://www.lightgalleryjs.com/
  * Copyright (c) 2020 Sachin Neravath;
  * @license GPLv3
@@ -246,5 +246,5 @@ var Autoplay = /** @class */ (function () {
     return Autoplay;
 }());
 
-export default Autoplay;
+export { Autoplay as default };
 //# sourceMappingURL=lg-autoplay.es5.js.map

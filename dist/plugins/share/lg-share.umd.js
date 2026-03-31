@@ -1,5 +1,5 @@
 /*!
- * lightgallery | 2.9.0 | October 1st 2025
+ * lightgallery | 2.9.1 | March 31st 2026
  * http://www.lightgalleryjs.com/
  * Copyright (c) 2020 Sachin Neravath;
  * @license GPLv3
@@ -9,7 +9,7 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
     typeof define === 'function' && define.amd ? define(factory) :
     (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.lgShare = factory());
-}(this, (function () { 'use strict';
+})(this, (function () { 'use strict';
 
     /*! *****************************************************************************
     Copyright (c) Microsoft Corporation.
@@ -37,12 +37,27 @@
         return __assign.apply(this, arguments);
     };
 
-    function __spreadArrays() {
-        for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-        for (var r = Array(s), k = 0, i = 0; i < il; i++)
-            for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-                r[k] = a[j];
-        return r;
+    function __read(o, n) {
+        var m = typeof Symbol === "function" && o[Symbol.iterator];
+        if (!m) return o;
+        var i = m.call(o), r, ar = [], e;
+        try {
+            while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+        }
+        catch (error) { e = { error: error }; }
+        finally {
+            try {
+                if (r && !r.done && (m = i["return"])) m.call(i);
+            }
+            finally { if (e) throw e.error; }
+        }
+        return ar;
+    }
+
+    function __spread() {
+        for (var ar = [], i = 0; i < arguments.length; i++)
+            ar = ar.concat(__read(arguments[i]));
+        return ar;
     }
 
     var shareSettings = {
@@ -130,7 +145,7 @@
             if (!this.settings.share) {
                 return;
             }
-            this.shareOptions = __spreadArrays(this.getDefaultShareOptions(), this.settings.additionalShareOptions);
+            this.shareOptions = __spread(this.getDefaultShareOptions(), this.settings.additionalShareOptions);
             this.setLgShareMarkup();
             this.core.outer
                 .find('.lg-share .lg-dropdown')
@@ -183,7 +198,7 @@
             return "<li><a class=\"lg-share-" + type + "\" rel=\"noopener\" target=\"_blank\"><span class=\"lg-icon\"></span><span class=\"lg-dropdown-text\">" + text + "</span></a></li>";
         };
         Share.prototype.getDefaultShareOptions = function () {
-            return __spreadArrays((this.settings.facebook
+            return __spread((this.settings.facebook
                 ? [
                     {
                         type: 'facebook',
@@ -223,5 +238,5 @@
 
     return Share;
 
-})));
+}));
 //# sourceMappingURL=lg-share.umd.js.map

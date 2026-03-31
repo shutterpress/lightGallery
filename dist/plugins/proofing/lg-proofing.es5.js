@@ -1,6 +1,6 @@
 /*!
- * lightGallery Proofing Plugin | 2.8.5 | March 31st 2026
- * https://shutterpress.io/
+ * lightGallery Proofing Plugin | 2.9.1 | March 31st 2026
+ * http://www.lightgalleryjs.com/
  * Copyright (c) 2026 ShutterPress;
  * @license GPLv3
  */
@@ -52,20 +52,20 @@ var Proofing = /** @class */ (function () {
         this.updateProofingState(this.core.index);
     };
     Proofing.prototype.appendProofingIcon = function () {
-        if (this.core.outer.find(".".concat(this.buttonClass)).get()) {
+        if (this.core.outer.find("." + this.buttonClass).get()) {
             return;
         }
-        this.core.$toolbar.append("<button type=\"button\" aria-label=\"Proofing status\" class=\"".concat(this.baseButtonClasses.join(' '), "\">\n                <svg viewBox=\"0 0 24 24\" width=\"18\" height=\"18\" aria-hidden=\"true\" focusable=\"false\">\n                    <path fill=\"currentColor\" d=\"M12 2a7 7 0 0 0-7 7c0 1.9.77 3.62 2 4.89V22l5-2.5L17 22v-8.11A6.97 6.97 0 0 0 19 9a7 7 0 0 0-7-7Zm0 2a5 5 0 0 1 5 5c0 1.35-.53 2.58-1.4 3.47l-.6.58V18.76l-3-1.5-3 1.5v-5.71l-.6-.58A4.97 4.97 0 0 1 7 9a5 5 0 0 1 5-5Z\"/>\n                </svg>\n            </button>"));
+        this.core.$toolbar.append("<button type=\"button\" aria-label=\"Proofing status\" class=\"" + this.baseButtonClasses.join(' ') + "\">\n                <svg viewBox=\"0 0 24 24\" width=\"18\" height=\"18\" aria-hidden=\"true\" focusable=\"false\">\n                    <path fill=\"currentColor\" d=\"M12 2a7 7 0 0 0-7 7c0 1.9.77 3.62 2 4.89V22l5-2.5L17 22v-8.11A6.97 6.97 0 0 0 19 9a7 7 0 0 0-7-7Zm0 2a5 5 0 0 1 5 5c0 1.35-.53 2.58-1.4 3.47l-.6.58V18.76l-3-1.5-3 1.5v-5.71l-.6-.58A4.97 4.97 0 0 1 7 9a5 5 0 0 1 5-5Z\"/>\n                </svg>\n            </button>");
     };
     Proofing.prototype.bindEvents = function () {
         var _this = this;
-        this.core.LGel.on("".concat(lGEvents.afterOpen, ".proofing"), function () {
+        this.core.LGel.on(lGEvents.afterOpen + ".proofing", function () {
             _this.updateProofingState(_this.core.index);
         });
-        this.core.LGel.on("".concat(lGEvents.afterSlide, ".proofing"), function (event) {
+        this.core.LGel.on(lGEvents.afterSlide + ".proofing", function (event) {
             _this.updateProofingState(event.detail.index);
         });
-        this.core.LGel.on("".concat(lGEvents.updateSlides, ".proofing"), function () {
+        this.core.LGel.on(lGEvents.updateSlides + ".proofing", function () {
             _this.updateProofingState(_this.core.index);
         });
     };
@@ -81,7 +81,7 @@ var Proofing = /** @class */ (function () {
     };
     Proofing.prototype.updateProofingState = function (index) {
         var _this = this;
-        var $button = this.core.outer.find(".".concat(this.buttonClass)).first();
+        var $button = this.core.outer.find("." + this.buttonClass).first();
         var button = $button.get();
         if (!button) {
             return;
@@ -105,11 +105,11 @@ var Proofing = /** @class */ (function () {
         if (!normalizedStatus) {
             return;
         }
-        $button.addClass("".concat(this.statusClassPrefix).concat(normalizedStatus));
+        $button.addClass("" + this.statusClassPrefix + normalizedStatus);
         $button.attr('data-proofing-status', status);
     };
     Proofing.prototype.destroy = function () {
-        this.core.outer.find(".".concat(this.buttonClass)).remove();
+        this.core.outer.find("." + this.buttonClass).remove();
         this.core.LGel.off('.proofing');
     };
     Proofing.pluginName = 'proofing';
