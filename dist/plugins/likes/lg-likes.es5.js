@@ -67,21 +67,90 @@ var Likes = /** @class */ (function () {
         this.core.LGel.on(lGEvents.updateSlides + ".likes", function () {
             _this.updateLikesState(_this.core.index);
         });
+        this.core.outer.on('click.likes', function (event) {
+            var target = event.target;
+            var likeButton = target === null || target === void 0 ? void 0 : target.closest("." + _this.linkClass);
+            if (!likeButton) {
+                return;
+            }
+            event.preventDefault();
+            _this.toggleLike(_this.core.index);
+        });
+    };
+    Likes.prototype.getImageId = function (index) {
+        var _a, _b, _c, _d, _e;
+        var sourceItem = (_a = this.core.items) === null || _a === void 0 ? void 0 : _a[index];
+        return ((sourceItem === null || sourceItem === void 0 ? void 0 : sourceItem.getAttribute('data-image-id')) || ((_b = sourceItem === null || sourceItem === void 0 ? void 0 : sourceItem.dataset) === null || _b === void 0 ? void 0 : _b.imageId) ||
+            ((_e = (_d = (_c = this.core.galleryItems) === null || _c === void 0 ? void 0 : _c[index]) === null || _d === void 0 ? void 0 : _d.imageId) !== null && _e !== void 0 ? _e : '') + '');
+    };
+    Likes.prototype.getLikedState = function (index) {
+        var _a, _b, _c;
+        var sourceItem = (_a = this.core.items) === null || _a === void 0 ? void 0 : _a[index];
+        var imageId = this.getImageId(index);
+        var galleryItem = (_b = this.core.galleryItems) === null || _b === void 0 ? void 0 : _b[index];
+        if (imageId &&
+            document.querySelector(".sp-gallery-item-" + imageId + ".sp-gallery-item-liked")) {
+            return { imageId: imageId, liked: true, known: true };
+        }
+        var likedAttr = (_c = sourceItem === null || sourceItem === void 0 ? void 0 : sourceItem.getAttribute('data-liked')) !== null && _c !== void 0 ? _c : null;
+        if (likedAttr === '1') {
+            return { imageId: imageId, liked: true, known: true };
+        }
+        if (likedAttr === '0') {
+            return { imageId: imageId, liked: false, known: true };
+        }
+        if (galleryItem &&
+            (galleryItem.liked !== undefined || galleryItem.isLiked !== undefined)) {
+            var likedValue = galleryItem.liked !== undefined
+                ? galleryItem.liked
+                : galleryItem.isLiked;
+            return {
+                imageId: imageId,
+                liked: likedValue === true ||
+                    likedValue === 1 ||
+                    likedValue === '1',
+                known: true,
+            };
+        }
+        return { imageId: imageId, liked: false, known: false };
+    };
+    Likes.prototype.getGalleryLikeIcon = function (imageId) {
+        if (!imageId) {
+            return null;
+        }
+        return document.querySelector(".sp-gallery-like-icon[data-image-id=\"" + imageId + "\"]");
+    };
+    Likes.prototype.toggleLike = function (index) {
+        var _this = this;
+        var imageId = this.getImageId(index);
+        var galleryLikeIcon = this.getGalleryLikeIcon(imageId);
+        if (!galleryLikeIcon) {
+            this.updateLikesState(index);
+            return;
+        }
+        galleryLikeIcon.dispatchEvent(new MouseEvent('click', {
+            bubbles: true,
+            cancelable: true,
+            view: window,
+        }));
+        this.updateLikesState(index);
+        window.setTimeout(function () { return _this.updateLikesState(index); }, 60);
+        window.setTimeout(function () { return _this.updateLikesState(index); }, 180);
+        window.setTimeout(function () { return _this.updateLikesState(index); }, 320);
     };
     Likes.prototype.updateLikesState = function (index) {
-        var _a;
         var $btn = this.core.outer.find("." + this.linkClass).first();
         if (!$btn.get())
             return;
         $btn.removeClass('lg-hide');
-        var sourceItem = (_a = this.core.items) === null || _a === void 0 ? void 0 : _a[index];
-        var imageId = sourceItem === null || sourceItem === void 0 ? void 0 : sourceItem.getAttribute('data-image-id');
-        var isLiked = !!imageId &&
-            !!document.querySelector(".sp-gallery-like-icon[data-image-id=\"" + imageId + "\"].sp-gallery-liked-image");
-        if (isLiked) {
+        var likedState = this.getLikedState(index);
+        if (likedState.imageId) {
+            $btn.attr('data-image-id', likedState.imageId);
+        }
+        if (likedState.liked) {
             $btn.addClass('sp-gallery-liked-image');
         }
-        else {
+        else if (likedState.known) {
             $btn.removeClass('sp-gallery-liked-image');
         }
     };
