@@ -1,5 +1,5 @@
 /*!
- * lightGallery Proofing Plugin | 2.9.1 | March 31st 2026
+ * lightGallery Proofing Plugin | 2.9.1 | April 3rd 2026
  * http://www.lightgalleryjs.com/
  * Copyright (c) 2026 ShutterPress;
  * @license GPLv3
@@ -94,7 +94,6 @@ var Proofing = /** @class */ (function () {
         });
         var status = this.getProofingStatus(index);
         if (!status) {
-            button.removeAttribute('data-proofing-status');
             return;
         }
         var normalizedStatus = status
@@ -106,7 +105,6 @@ var Proofing = /** @class */ (function () {
             return;
         }
         $button.addClass("" + this.statusClassPrefix + normalizedStatus);
-        $button.attr('data-proofing-status', status);
     };
     Proofing.prototype.destroy = function () {
         this.core.outer.find("." + this.buttonClass).remove();

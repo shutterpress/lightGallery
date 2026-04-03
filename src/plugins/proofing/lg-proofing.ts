@@ -70,7 +70,7 @@ export default class Proofing {
             return;
         }
 
-        const classNames = Array.from(button.classList);
+        const classNames = Array.from(button.classList) as string[];
         classNames.forEach((className) => {
             if (className.indexOf(this.statusClassPrefix) === 0) {
                 $button.removeClass(className);
@@ -79,7 +79,6 @@ export default class Proofing {
 
         const status = this.getProofingStatus(index);
         if (!status) {
-            button.removeAttribute('data-proofing-status');
             return;
         }
 
@@ -94,7 +93,6 @@ export default class Proofing {
         }
 
         $button.addClass(`${this.statusClassPrefix}${normalizedStatus}`);
-        $button.attr('data-proofing-status', status);
     }
 
     destroy(): void {

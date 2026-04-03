@@ -68,5 +68,10 @@
         "name": "proofing",
         "folder": "plugins/proofing/",
         "fileName": "lg-proofing"
+    },
+    {
+        "name": "likes",
+        "folder": "plugins/likes/",
+        "fileName": "lg-likes"
     }
 ]
