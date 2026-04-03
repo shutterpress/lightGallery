@@ -60,7 +60,7 @@
             if (this.core.outer.find("." + this.linkClass).get()) {
                 return;
             }
-            this.core.$toolbar.append("<a\n                href=\"#\"\n                target=\"_blank\"\n                rel=\"noopener\"\n                aria-label=\"View likes\"\n                class=\"" + this.baseLinkClasses.join(' ') + "\"\n            >\n                <svg viewBox=\"0 0 24 24\" width=\"18\" height=\"18\" aria-hidden=\"true\" focusable=\"false\">\n                    <path fill=\"currentColor\" d=\"M12 21.35 10.55 20C5.4 15.24 2 12.09 2 8.25 2 5.1 4.42 2.75 7.5 2.75c1.74 0 3.41.81 4.5 2.09 1.09-1.28 2.76-2.09 4.5-2.09 3.08 0 5.5 2.35 5.5 5.5 0 3.84-3.4 6.99-8.55 11.76L12 21.35Z\"/>\n                </svg>\n            </a>");
+            this.core.$toolbar.append("<a\n                href=\"#\"\n                target=\"_blank\"\n                rel=\"noopener\"\n                aria-label=\"View likes\"\n                class=\"" + this.baseLinkClasses.join(' ') + "\"\n            >\n                <svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-heart-icon lucide-heart\"><path d=\"M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z\"/></svg>\n            </a>");
         };
         Likes.prototype.bindEvents = function () {
             var _this = this;
