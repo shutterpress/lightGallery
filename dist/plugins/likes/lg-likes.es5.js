@@ -48,53 +48,42 @@ var Likes = /** @class */ (function () {
     Likes.prototype.init = function () {
         this.appendLikesIcon();
         this.bindEvents();
-        this.updateLikesLink(this.core.index);
+        this.updateLikesState(this.core.index);
     };
     Likes.prototype.appendLikesIcon = function () {
         if (this.core.outer.find("." + this.linkClass).get()) {
             return;
         }
-        this.core.$toolbar.append("<a\n                href=\"#\"\n                target=\"_blank\"\n                rel=\"noopener\"\n                aria-label=\"View likes\"\n                class=\"" + this.baseLinkClasses.join(' ') + "\"\n            >\n                <svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-heart-icon lucide-heart\"><path d=\"M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z\"/></svg>\n            </a>");
+        this.core.$toolbar.append("<button\n      type=\"button\"\n      aria-label=\"Toggle like\"\n      class=\"" + this.baseLinkClasses.join(' ') + "\"\n   >\n                <svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-heart-icon lucide-heart\"><path d=\"M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z\"/></svg>\n            </button>");
     };
     Likes.prototype.bindEvents = function () {
         var _this = this;
         this.core.LGel.on(lGEvents.afterOpen + ".likes", function () {
-            _this.updateLikesLink(_this.core.index);
+            _this.updateLikesState(_this.core.index);
         });
         this.core.LGel.on(lGEvents.afterSlide + ".likes", function (event) {
-            _this.updateLikesLink(event.detail.index);
+            _this.updateLikesState(event.detail.index);
         });
         this.core.LGel.on(lGEvents.updateSlides + ".likes", function () {
-            _this.updateLikesLink(_this.core.index);
+            _this.updateLikesState(_this.core.index);
         });
     };
-    Likes.prototype.getLikesUrl = function (index) {
+    Likes.prototype.updateLikesState = function (index) {
         var _a;
-        var galleryItem = this.core.galleryItems[index];
-        var itemLikesUrl = (galleryItem === null || galleryItem === void 0 ? void 0 : galleryItem.likesUrl) || (galleryItem === null || galleryItem === void 0 ? void 0 : galleryItem.likeUrl) || (galleryItem === null || galleryItem === void 0 ? void 0 : galleryItem.shutterpressLikesUrl) || (galleryItem === null || galleryItem === void 0 ? void 0 : galleryItem.shutterpressGalleryLikesUrl);
-        if (itemLikesUrl) {
-            return itemLikesUrl;
-        }
+        var $btn = this.core.outer.find("." + this.linkClass).first();
+        if (!$btn.get())
+            return;
+        $btn.removeClass('lg-hide');
         var sourceItem = (_a = this.core.items) === null || _a === void 0 ? void 0 : _a[index];
-        return ((sourceItem === null || sourceItem === void 0 ? void 0 : sourceItem.getAttribute('data-likes-url')) || (sourceItem === null || sourceItem === void 0 ? void 0 : sourceItem.getAttribute('data-like-url')) || (sourceItem === null || sourceItem === void 0 ? void 0 : sourceItem.getAttribute('data-shutterpress-likes-url')) || (sourceItem === null || sourceItem === void 0 ? void 0 : sourceItem.getAttribute('data-shutterpress-gallery-likes-url')) ||
-            undefined);
-    };
-    Likes.prototype.updateLikesLink = function (index) {
-        var $link = this.core.outer.find("." + this.linkClass).first();
-        var link = $link.get();
-        if (!link) {
-            return;
+        var imageId = sourceItem === null || sourceItem === void 0 ? void 0 : sourceItem.getAttribute('data-image-id');
+        var isLiked = !!imageId &&
+            !!document.querySelector(".sp-gallery-like-icon[data-image-id=\"" + imageId + "\"].sp-gallery-liked-image");
+        if (isLiked) {
+            $btn.addClass('sp-gallery-liked-image');
         }
-        var likesUrl = this.getLikesUrl(index);
-        if (!likesUrl) {
-            $link.attr('href', '#');
-            $link.addClass('lg-hide');
-            link.removeAttribute('data-likes-url');
-            return;
+        else {
+            $btn.removeClass('sp-gallery-liked-image');
         }
-        $link.removeClass('lg-hide');
-        $link.attr('href', likesUrl);
-        $link.attr('data-likes-url', likesUrl);
     };
     Likes.prototype.destroy = function () {
         this.core.outer.find("." + this.linkClass).remove();

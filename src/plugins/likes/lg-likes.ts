@@ -14,7 +14,7 @@ export default class Likes {
     init(): void {
         this.appendLikesIcon();
         this.bindEvents();
-        this.updateLikesLink(this.core.index);
+        this.updateLikesState(this.core.index);
     }
 
     private appendLikesIcon(): void {
@@ -23,78 +23,53 @@ export default class Likes {
         }
 
         this.core.$toolbar.append(
-            `<a
-                href="#"
-                target="_blank"
-                rel="noopener"
-                aria-label="View likes"
-                class="${this.baseLinkClasses.join(' ')}"
-            >
+            `<button
+      type="button"
+      aria-label="Toggle like"
+      class="${this.baseLinkClasses.join(' ')}"
+   >
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-heart-icon lucide-heart"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
-            </a>`,
+            </button>`,
         );
     }
 
     private bindEvents(): void {
         this.core.LGel.on(`${lGEvents.afterOpen}.likes`, () => {
-            this.updateLikesLink(this.core.index);
+            this.updateLikesState(this.core.index);
         });
 
         this.core.LGel.on(
             `${lGEvents.afterSlide}.likes`,
             (event: CustomEvent<AfterSlideDetail>) => {
-                this.updateLikesLink(event.detail.index);
+                this.updateLikesState(event.detail.index);
             },
         );
 
         this.core.LGel.on(`${lGEvents.updateSlides}.likes`, () => {
-            this.updateLikesLink(this.core.index);
+            this.updateLikesState(this.core.index);
         });
     }
 
-    private getLikesUrl(index: number): string | undefined {
-        const galleryItem = this.core.galleryItems[index];
-        const itemLikesUrl =
-            galleryItem?.likesUrl ||
-            galleryItem?.likeUrl ||
-            galleryItem?.shutterpressLikesUrl ||
-            galleryItem?.shutterpressGalleryLikesUrl;
+    private updateLikesState(index: number): void {
+        const $btn = this.core.outer.find(`.${this.linkClass}`).first();
+        if (!$btn.get()) return;
 
-        if (itemLikesUrl) {
-            return itemLikesUrl;
-        }
+        $btn.removeClass('lg-hide');
 
         const sourceItem = this.core.items?.[index] as HTMLElement | undefined;
+        const imageId = sourceItem?.getAttribute('data-image-id');
 
-        return (
-            sourceItem?.getAttribute('data-likes-url') ||
-            sourceItem?.getAttribute('data-like-url') ||
-            sourceItem?.getAttribute('data-shutterpress-likes-url') ||
-            sourceItem?.getAttribute('data-shutterpress-gallery-likes-url') ||
-            undefined
-        );
-    }
+        const isLiked =
+            !!imageId &&
+            !!document.querySelector(
+                `.sp-gallery-like-icon[data-image-id="${imageId}"].sp-gallery-liked-image`,
+            );
 
-    private updateLikesLink(index: number): void {
-        const $link = this.core.outer.find(`.${this.linkClass}`).first();
-        const link = $link.get() as HTMLAnchorElement | null;
-
-        if (!link) {
-            return;
+        if (isLiked) {
+            $btn.addClass('sp-gallery-liked-image');
+        } else {
+            $btn.removeClass('sp-gallery-liked-image');
         }
-
-        const likesUrl = this.getLikesUrl(index);
-
-        if (!likesUrl) {
-            $link.attr('href', '#');
-            $link.addClass('lg-hide');
-            link.removeAttribute('data-likes-url');
-            return;
-        }
-
-        $link.removeClass('lg-hide');
-        $link.attr('href', likesUrl);
-        $link.attr('data-likes-url', likesUrl);
     }
 
     destroy(): void {
