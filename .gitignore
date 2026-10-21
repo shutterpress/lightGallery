@@ -25,3 +25,8 @@ compiled
 .rpt2_cache
 /docs
 /site/data
+
+# Ship declarations and theme sources with the prebuilt runtime.
+!dist/**/*.d.ts
+!dist/**/*.scss
+*.tgz

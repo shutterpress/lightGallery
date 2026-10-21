@@ -1,11 +1,9 @@
-/*!
- * lightgallery | 2.9.1 | April 3rd 2026
+/*! lightgallery | 2.9.1-shutterpress.1
  * http://www.lightgalleryjs.com/
- * Copyright (c) 2020 Sachin Neravath;
+ * Copyright (c) 2020 Sachin Neravath
  * @license GPLv3
  */
-
-/*! *****************************************************************************
+/******************************************************************************
 Copyright (c) Microsoft Corporation.
 
 Permission to use, copy, modify, and/or distribute this software for any
@@ -19,6 +17,8 @@ LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
 OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 PERFORMANCE OF THIS SOFTWARE.
 ***************************************************************************** */
+/* global Reflect, Promise, SuppressedError, Symbol, Iterator */
+
 
 var __assign = function() {
     __assign = Object.assign || function __assign(t) {
@@ -31,35 +31,22 @@ var __assign = function() {
     return __assign.apply(this, arguments);
 };
 
+typeof SuppressedError === "function" ? SuppressedError : function (error, suppressed, message) {
+    var e = new Error(message);
+    return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
+};
+
 /**
  * List of lightGallery events
  * All events should be documented here
  * Below interfaces are used to build the website documentations
  * */
 var lGEvents = {
-    afterAppendSlide: 'lgAfterAppendSlide',
-    init: 'lgInit',
-    hasVideo: 'lgHasVideo',
-    containerResize: 'lgContainerResize',
-    updateSlides: 'lgUpdateSlides',
-    afterAppendSubHtml: 'lgAfterAppendSubHtml',
-    beforeOpen: 'lgBeforeOpen',
-    afterOpen: 'lgAfterOpen',
     slideItemLoad: 'lgSlideItemLoad',
     beforeSlide: 'lgBeforeSlide',
     afterSlide: 'lgAfterSlide',
-    posterClick: 'lgPosterClick',
     dragStart: 'lgDragStart',
-    dragMove: 'lgDragMove',
     dragEnd: 'lgDragEnd',
-    beforeNextSlide: 'lgBeforeNextSlide',
-    beforePrevSlide: 'lgBeforePrevSlide',
-    beforeClose: 'lgBeforeClose',
-    afterClose: 'lgAfterClose',
-    rotateLeft: 'lgRotateLeft',
-    rotateRight: 'lgRotateRight',
-    flipHorizontal: 'lgFlipHorizontal',
-    flipVertical: 'lgFlipVertical',
     autoplay: 'lgAutoplay',
     autoplayStart: 'lgAutoplayStart',
     autoplayStop: 'lgAutoplayStop',
@@ -110,25 +97,25 @@ var Autoplay = /** @class */ (function () {
         }
         // Start autoplay
         if (this.settings.slideShowAutoplay) {
-            this.core.LGel.once(lGEvents.slideItemLoad + ".autoplay", function () {
+            this.core.LGel.once("".concat(lGEvents.slideItemLoad, ".autoplay"), function () {
                 _this.startAutoPlay();
             });
         }
         // cancel interval on touchstart and dragstart
-        this.core.LGel.on(lGEvents.dragStart + ".autoplay touchstart.lg.autoplay", function () {
+        this.core.LGel.on("".concat(lGEvents.dragStart, ".autoplay touchstart.lg.autoplay"), function () {
             if (_this.interval) {
                 _this.stopAutoPlay();
                 _this.pausedOnTouchDrag = true;
             }
         });
         // restore autoplay if autoplay canceled from touchstart / dragstart
-        this.core.LGel.on(lGEvents.dragEnd + ".autoplay touchend.lg.autoplay", function () {
+        this.core.LGel.on("".concat(lGEvents.dragEnd, ".autoplay touchend.lg.autoplay"), function () {
             if (!_this.interval && _this.pausedOnTouchDrag) {
                 _this.startAutoPlay();
                 _this.pausedOnTouchDrag = false;
             }
         });
-        this.core.LGel.on(lGEvents.beforeSlide + ".autoplay", function () {
+        this.core.LGel.on("".concat(lGEvents.beforeSlide, ".autoplay"), function () {
             _this.showProgressBar();
             if (!_this.fromAuto && _this.interval) {
                 _this.stopAutoPlay();
@@ -140,7 +127,7 @@ var Autoplay = /** @class */ (function () {
             _this.fromAuto = false;
         });
         // restore autoplay if autoplay canceled from touchstart / dragstart
-        this.core.LGel.on(lGEvents.afterSlide + ".autoplay", function () {
+        this.core.LGel.on("".concat(lGEvents.afterSlide, ".autoplay"), function () {
             if (_this.pausedOnSlideChange &&
                 !_this.interval &&
                 _this.settings.forceSlideShowAutoplay) {
@@ -172,7 +159,7 @@ var Autoplay = /** @class */ (function () {
     // Manage autoplay via play/stop buttons
     Autoplay.prototype.controls = function () {
         var _this = this;
-        var _html = "<button aria-label=\"" + this.settings.autoplayPluginStrings['toggleAutoplay'] + "\" type=\"button\" class=\"lg-autoplay-button lg-icon\"></button>";
+        var _html = "<button aria-label=\"".concat(this.settings.autoplayPluginStrings['toggleAutoplay'], "\" type=\"button\" class=\"lg-autoplay-button lg-icon\"></button>");
         // Append autoplay controls
         this.core.outer
             .find(this.settings.appendAutoplayControlsTo)
@@ -247,4 +234,3 @@ var Autoplay = /** @class */ (function () {
 }());
 
 export { Autoplay as default };
-//# sourceMappingURL=lg-autoplay.es5.js.map
