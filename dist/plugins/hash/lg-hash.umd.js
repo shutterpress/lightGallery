@@ -1,17 +1,15 @@
-/*!
- * lightgallery | 2.9.1 | April 3rd 2026
+/*! lightgallery | 2.9.1-shutterpress.1
  * http://www.lightgalleryjs.com/
- * Copyright (c) 2020 Sachin Neravath;
+ * Copyright (c) 2020 Sachin Neravath
  * @license GPLv3
  */
-
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
     typeof define === 'function' && define.amd ? define(factory) :
     (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.lgHash = factory());
 })(this, (function () { 'use strict';
 
-    /*! *****************************************************************************
+    /******************************************************************************
     Copyright (c) Microsoft Corporation.
 
     Permission to use, copy, modify, and/or distribute this software for any
@@ -25,6 +23,8 @@
     OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
     PERFORMANCE OF THIS SOFTWARE.
     ***************************************************************************** */
+    /* global Reflect, Promise, SuppressedError, Symbol, Iterator */
+
 
     var __assign = function() {
         __assign = Object.assign || function __assign(t) {
@@ -37,39 +37,19 @@
         return __assign.apply(this, arguments);
     };
 
+    typeof SuppressedError === "function" ? SuppressedError : function (error, suppressed, message) {
+        var e = new Error(message);
+        return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
+    };
+
     /**
      * List of lightGallery events
      * All events should be documented here
      * Below interfaces are used to build the website documentations
      * */
     var lGEvents = {
-        afterAppendSlide: 'lgAfterAppendSlide',
-        init: 'lgInit',
-        hasVideo: 'lgHasVideo',
-        containerResize: 'lgContainerResize',
-        updateSlides: 'lgUpdateSlides',
-        afterAppendSubHtml: 'lgAfterAppendSubHtml',
-        beforeOpen: 'lgBeforeOpen',
-        afterOpen: 'lgAfterOpen',
-        slideItemLoad: 'lgSlideItemLoad',
-        beforeSlide: 'lgBeforeSlide',
         afterSlide: 'lgAfterSlide',
-        posterClick: 'lgPosterClick',
-        dragStart: 'lgDragStart',
-        dragMove: 'lgDragMove',
-        dragEnd: 'lgDragEnd',
-        beforeNextSlide: 'lgBeforeNextSlide',
-        beforePrevSlide: 'lgBeforePrevSlide',
-        beforeClose: 'lgBeforeClose',
-        afterClose: 'lgAfterClose',
-        rotateLeft: 'lgRotateLeft',
-        rotateRight: 'lgRotateRight',
-        flipHorizontal: 'lgFlipHorizontal',
-        flipVertical: 'lgFlipVertical',
-        autoplay: 'lgAutoplay',
-        autoplayStart: 'lgAutoplayStart',
-        autoplayStop: 'lgAutoplayStop',
-    };
+        afterClose: 'lgAfterClose'};
 
     var hashSettings = {
         hash: true,
@@ -96,10 +76,10 @@
                 _this.buildFromHash();
             }, 100);
             // Change hash value on after each slide transition
-            this.core.LGel.on(lGEvents.afterSlide + ".hash", this.onAfterSlide.bind(this));
-            this.core.LGel.on(lGEvents.afterClose + ".hash", this.onCloseAfter.bind(this));
+            this.core.LGel.on("".concat(lGEvents.afterSlide, ".hash"), this.onAfterSlide.bind(this));
+            this.core.LGel.on("".concat(lGEvents.afterClose, ".hash"), this.onCloseAfter.bind(this));
             // Listen hash change and change the slide according to slide value
-            this.$LG(window).on("hashchange.lg.hash.global" + this.core.lgId, this.onHashchange.bind(this));
+            this.$LG(window).on("hashchange.lg.hash.global".concat(this.core.lgId), this.onHashchange.bind(this));
         };
         Hash.prototype.onAfterSlide = function (event) {
             var slideName = this.core.galleryItems[event.detail.index].slideName;
@@ -195,7 +175,7 @@
         Hash.prototype.destroy = function () {
             this.core.LGel.off('.lg.hash');
             this.core.LGel.off('.hash');
-            this.$LG(window).off("hashchange.lg.hash.global" + this.core.lgId);
+            this.$LG(window).off("hashchange.lg.hash.global".concat(this.core.lgId));
         };
         return Hash;
     }());
@@ -203,4 +183,3 @@
     return Hash;
 
 }));
-//# sourceMappingURL=lg-hash.umd.js.map

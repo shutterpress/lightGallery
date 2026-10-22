@@ -1,4 +1,4 @@
-// This files contains lightGallery and all plugins
+// This files contains lightGallery and the plugins used by Shutterpress
 
 // Example For white theme
 // $lg-theme-color: #fff;
@@ -17,16 +17,9 @@
 @use 'lg-fonts';
 @use 'lg-theme-default';
 @use 'lg-thumbnail';
-@use 'lg-video';
 @use 'lg-autoplay';
 @use 'lg-zoom';
-@use 'lg-pager';
 @use 'lg-fullscreen';
-@use 'lg-share';
-@use 'lg-comments';
-@use 'lg-rotate';
-@use 'lg-medium-zoom';
-@use 'lg-relative-caption';
 
 // Core
 @use 'lightgallery-core';
